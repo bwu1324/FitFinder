@@ -53,7 +53,6 @@ wsserver.on('connection', (socket) => {
         try {
             // parse the data
             const data = JSON.parse(message.data)
-            console.log(data)
 
             if (data.type === 'auth') {
                 // find user and close socket if not found
@@ -139,7 +138,7 @@ wsserver.on('connection', (socket) => {
 
                         // parse the data
                         var chat = JSON.parse(chatData)
-                        console.log(chat)
+
                         // add the new message to list
                         const newMessage = {
                             username: username,
@@ -191,7 +190,6 @@ wsserver.on('connection', (socket) => {
                         type: 'more',
                         data: JSON.parse(data) 
                     }
-                    console.log(history)
                     socket.send(JSON.stringify(history))
                 })
             } else { // if this is an unexpected message, close the connection

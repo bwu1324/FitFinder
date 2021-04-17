@@ -38,7 +38,6 @@ socket.onopen = function () {
 }
 
 socket.onmessage = function (message) {
-    console.log(message.data)
     message = JSON.parse(message.data)
 
     if (message.type === 'newMessage') {
