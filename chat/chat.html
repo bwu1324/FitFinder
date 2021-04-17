@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+    <head>
+        <link rel="stylesheet" href="./chat.css">
+        <script src="./chat.js"></script>
+    </head>
+    <html>
+    <body>
+        <div id="friends">
+            <div class="friend">
+                <div>Name of Friend</div>
+            </div>
+        </div>
+        <div id="chat" onload="connect()">
+            <div id="history-container">
+                <div id="history">
+                    <div class="messageContainer">
+                        <div class="rightSender">Bob</div>
+                        <div class="rightMessage">This is a message</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="rightSender">Bob</div>
+                        <div class="rightMessage">Hi</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="rightSender">Bob</div>
+                        <div class="rightMessage">asdf</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="rightSender">Bob</div>
+                        <div class="rightMessage">asdf</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="rightSender">Bob</div>
+                        <div class="rightMessage">asdf</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="rightSender">Bob</div>
+                        <div class="rightMessage">asdf</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="rightSender">Bob</div>
+                        <div class="rightMessage">asdf</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="rightSender">Bob</div>
+                        <div class="rightMessage">asdf</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="leftSender">Joe</div>
+                        <div class="leftMessage">This is a message</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="leftSender">Joe</div>
+                        <div class="leftMessage">This is a nother</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="leftSender">Joe</div>
+                        <div class="leftMessage">Weee</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="rightSender">Bob</div>
+                        <div class="rightMessage">Sending messages is fun</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="leftSender">Joe</div>
+                        <div class="leftMessage">Sending messages is fun</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="leftSender">Joe</div>
+                        <div class="leftMessage">Sending messages is fun</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="leftSender">Joe</div>
+                        <div class="leftMessage">Sending messages is fun</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="leftSender">Joe</div>
+                        <div class="leftMessage">Sending messages is fun</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="rightSender">Bob</div>
+                        <div class="rightMessage">Weeeee</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="rightSender">Bob</div>
+                        <div class="rightMessage">Weeeee</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="rightSender">Bob</div>
+                        <div class="rightMessage">Weeeee</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="rightSender">Bob</div>
+                        <div class="rightMessage">Weeeee</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="rightSender">Bob</div>
+                        <div class="rightMessage">Weeeee</div>
+                    </div>
+
+                </div>
+            </div>
+            <form id='message-box' onsubmit="return false">
+                <input type="text" id="message">
+    
+                <button type="submit" id="message-send" onclick="send()">Send</button>
+            </form>
+        </div>
+    </body>
+</html>

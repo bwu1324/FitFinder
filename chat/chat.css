@@ -1,0 +1,92 @@
+body {
+    padding: 0px;
+    margin: 0px;
+}
+
+#friends {
+    width: 15%;
+    background-color: aqua;
+    height: 100vh;
+    float: left;
+}
+
+.friend {
+    width: 100%
+}
+
+#chat {
+    float: left;
+    width: 85%;
+    background-color: azure;
+    margin: 0px;
+    height: 100vh;
+}
+
+#history-container {
+    overflow-y: scroll;
+    position: relative;
+    height: calc(100vh - 60px);
+}
+
+#history {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    bottom: 0px;
+}
+
+#message-box {
+    height: 40px;
+    width: 100%;
+}
+
+#message {
+    width: calc(100% - 100px);
+    margin: 10px;
+}
+
+#message-send {
+    margin: 0px;
+    width: 50px;
+}
+
+#end {
+    margin: 10px;
+    text-align: center
+}
+
+.messageContainer {
+    margin: 0px 0px 20px 0px;
+    float: left;
+    width: 100%
+}
+
+.leftMessage {
+    text-align: left;
+    width: calc(100% - 20px);
+    float: left;
+    margin-left: 20px;
+}
+
+.rightMessage {
+    text-align: right;
+    width: calc(100% - 20px);
+    float: right;
+    margin-right: 20px;
+}
+
+.rightSender {
+    text-align: right;
+    width: calc(100% - 20px);
+    float: right;
+    margin-right: 20px;
+    height: 20px;
+}
+
+.leftSender {
+    text-align: left;
+    width: calc(100% - 20px);
+    float: left;
+    margin-left: 20px;
+    height: 20px;
+}
