@@ -30,7 +30,6 @@ socket.onopen = function () {
         if (historyContainer.scrollTop === 0 && !wait) {
             wait = true
             if (page > 0) {
-                console.log(page)
                 socket.send(JSON.stringify({ type: 'more', number: page - 1 }))
             }
         }
@@ -83,7 +82,6 @@ socket.onmessage = function (message) {
             document.getElementById('history').insertBefore(messageContainer, document.getElementById('history').firstChild);
         } else {
             page = message.data.number
-            console.log(page)
             for (let i = message.data.messages.length - 1; i >= 0; i--) {
                 const user = message.data.messages[i].username
                 var className
@@ -133,7 +131,6 @@ function send() {
         message: text,
         timestamp: Date.now(),
     }
-    console.log(message)
 
     socket.send(JSON.stringify(message))
 }
