@@ -68,10 +68,11 @@ function findUser(session) {
     })
 }
 
+
+// setting up express
 const app = express()
 
 app.set('view engine', 'ejs')
-
 app.use(express.static('./assets'))
 app.use(cookieParser())
 app.use(bodyParser.json())
@@ -111,6 +112,12 @@ app.get('/profile', async (req, res) => {
     // otherwise, redirect to index
     else { res.redirect('/index') }
 })
+
+// forum page
+app.get('/forum/:conversation/:page', (req, res) => {
+
+})
+
 
 // login form post req
 app.post('/login', async (req, res) => {
