@@ -31,24 +31,21 @@ function signup() {
         document.getElementById('usernameTooltip').textContent = "Username cannot be blank!"
         document.getElementById('usernameTooltip').style.visibility = "visible";
         error = true;
-    }
-    else {
+    } else {
         document.getElementById('usernameTooltip').style.visibility = "hidden";
     }
 
     if (data.password.length < 8) {
         document.getElementById('passwordTooltip').style.visibility = "visible";
         error = true;
-    }
-    else {
+    } else {
         document.getElementById('passwordTooltip').style.visibility = "hidden";
     }
 
     if (data.confirmPassword !== data.password) {
         document.getElementById('confirmPasswordTooltip').style.visibility = "visible";
         error = true;
-    }
-    else {
+    } else {
         document.getElementById('confirmPasswordTooltip').style.visibility = "hidden";
     }
 

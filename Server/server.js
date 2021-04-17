@@ -110,25 +110,47 @@ app.get('/profile', async (req, res) => {
     const user = await findUser(req.cookies.session)
     if (user) { res.render('profile', { user: user }) }
 
-    // otherwise, redirect to index
-    else { res.redirect('/index') }
+    // otherwise, redirect to signup
+    else { res.redirect('/signup') }
 })
 
 // forum page
-app.get('/forum/:conversation/:page', (req, res) => {
-
+app.get('/forum', (req, res) => {
+    res.render('forumHome')
 })
 
-// profile page
+app.get('/forum/:conversation/:page', async (req, res) => {
+    // check if user has valid session cookie, send forum if yes
+    const user = await findUser(req.cookies.session)
+    if (user) {
+        res.render('forum', { friends: user.friends })
+    }
+
+    // otherwise, redirect to signup
+    else { res.redirect('/signup') }
+})
+
+// chat page
+app.get('/chat/', async (req, res) => {
+    // check if user has valid session cookie, send chat page if yes
+    const user = await findUser(req.cookies.session)
+    if (user) {
+        res.render('chatClosed', { friends: user.friends })
+    }
+
+    // otherwise, redirect to signup
+    else { res.redirect('/signup') }
+})
+
 app.get('/chat/:friend', async (req, res) => {
     // check if user has valid session cookie, send chat page if yes
     const user = await findUser(req.cookies.session)
     if (user) {
-        res.render('chat', { friends: user.friends })
+        res.render('chatOpen', { friends: user.friends })
     }
 
-    // otherwise, redirect to index
-    else { res.redirect('/index') }
+    // otherwise, redirect to signup
+    else { res.redirect('/signup') }
 })
 
 
