@@ -176,7 +176,9 @@ app.post('/signup', (req, res) => {
                 const newUser = {
                     username: data.username,
                     hash: hash,
-                    name: data.name
+                    name: data.name,
+                    zip: data.zip,
+                    weight: data.weight,
                 }
 
                 // save user data,  apologize if things go wrong

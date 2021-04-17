@@ -74,7 +74,7 @@
     </form>
 </div>
 -->
-<div style="display: block; text-align: center">
+<div style="display: block; text-align: center; height: auto">
     <form onsubmit="return false">
         <h2 class="h2 text-center col-12 py-5 semi-bold-600">Sign Up</h2>
         <div class="form-floating">
@@ -105,8 +105,33 @@
             </center>
         </div>
         <p></p>
-        <button class="btn btn-primary rounded-pill btn-block shadow px-4 py-2" type="submit" onclick="signup()" style="width: 400px; height: 50px">Get Started with <strong>FitFinder</strong></button>
-        <p></p>
+        <div class="form-floating">
+            <input type="text" class="form-control light-300" id="nameField" name="nameField" placeholder="Full Name">
+            <center>
+                <div style="width: 35%">
+                    <p id="nameTooltip" style="position: relative; text-align: left; color: red; visibility: hidden">Name cannot be blank!</p>
+                </div>
+            </center>
+        </div>
+        <div class="form-floating">
+            <center>
+                <div style="width: 35%; text-align: left">
+
+                    <input type="number" class="form-control light-300" style="width: 45%; float: left;" id="weightField" name="weightField" placeholder="Weight (lbs)">
+                    <input type="number" class="form-control light-300" style="width: 45%; float: right;" id="zipField" name="zipField" placeholder="Zip Code">
+
+                </div>
+
+            </center>
+            <br><br>
+            <center>
+            <div style="width: 35%">
+                <p id="numTooltip" style="position: relative; text-align: left; color: red; visibility: hidden">These fields cannot be blank!</p>
+            </div>
+            </center>
+        </div>
+        <p></p><p></p>
+        <button class="btn btn-primary rounded-pill btn-block shadow px-4 py-2" type="submit" onclick="signup()" style="width: 400px; height: 50px;">Get Started with <strong>FitFinder</strong></button>
 
     </form>
     <a href="/login">

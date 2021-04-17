@@ -4,9 +4,28 @@ function signup() {
         username: document.getElementById('username').value,
         password: document.getElementById('password').value,
         confirmPassword: document.getElementById('confirmpassword').value,
+        name: document.getElementById('nameField').value,
+        zip: document.getElementById('zipField').value,
+        weight: document.getElementById('weightField').value,
     }
 
     let error = false;
+
+    if (data.zip === "" || data.weight === "") {
+        document.getElementById('numTooltip').style.visibility = "visible";
+        error = true;
+    }
+    else {
+        document.getElementById('numTooltip').style.visibility = "hidden";
+    }
+
+    if (data.name === "") {
+        document.getElementById('nameTooltip').style.visibility = "visible";
+        error = true;
+    }
+    else {
+        document.getElementById('nameTooltip').style.visibility = "hidden";
+    }
 
     if (data.username === "") {
         document.getElementById('usernameTooltip').textContent = "Username cannot be blank!"
@@ -16,6 +35,7 @@ function signup() {
     else {
         document.getElementById('usernameTooltip').style.visibility = "hidden";
     }
+
     if (data.password.length < 8) {
         document.getElementById('passwordTooltip').style.visibility = "visible";
         error = true;
@@ -23,6 +43,7 @@ function signup() {
     else {
         document.getElementById('passwordTooltip').style.visibility = "hidden";
     }
+
     if (data.confirmPassword !== data.password) {
         document.getElementById('confirmPasswordTooltip').style.visibility = "visible";
         error = true;
@@ -30,6 +51,8 @@ function signup() {
     else {
         document.getElementById('confirmPasswordTooltip').style.visibility = "hidden";
     }
+
+
     if (error) {
         return
     }
