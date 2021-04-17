@@ -123,8 +123,8 @@ app.get('/forum/:conversation/:page', (req, res) => {
 app.get('/chat', async (req, res) => {
     // check if user has valid session cookie, send chat page if yes
     const user = await findUser(req.cookies.session)
-    if (user) { 
-        res.render('chat', { user: user }) 
+    if (user) {
+        res.render('chat', { user: user })
     }
 
     // otherwise, redirect to index

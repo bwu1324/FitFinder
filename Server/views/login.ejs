@@ -5,32 +5,32 @@
     <title>Purple Buzz HTML Template with Bootstrap 5 Beta 1</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="./js/login.js"></script>
-    <link rel="apple-touch-icon" href="./img/apple-icon.png">
-    <link rel="shortcut icon" type="image/x-icon" href="./img/favicon.ico">
+    <script src="./login.js"></script>
+    <link rel="apple-touch-icon" href="../global/img/apple-icon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="../global/img/favicon.ico">
     <!-- Load Require CSS -->
-    <link href="./css/bootstrap.min.css" rel="stylesheet">
+    <link href="../global/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font CSS -->
-    <link href="./css/boxicon.min.css" rel="stylesheet">
+    <link href="../global/css/boxicon.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
     <!-- Load Tempalte CSS -->
-    <link rel="stylesheet" href="./css/templatemo.css">
+    <link rel="stylesheet" href="../global/css/templatemo.css">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="./css/custom.css">
-<!--
+    <link rel="stylesheet" href="../global/css/custom.css">
+    <!--
 
-TemplateMo 561 Purple Buzz
+    TemplateMo 561 Purple Buzz
 
-https://templatemo.com/tm-561-purple-buzz
+    https://templatemo.com/tm-561-purple-buzz
 
--->
+    -->
 </head>
 
 <body>
 <!-- Header -->
 <nav id="main_nav" class="navbar navbar-expand-lg navbar-light bg-white shadow">
     <div class="container d-flex justify-content-between align-items-center">
-        <a class="navbar-brand h1" href="index.html">
+        <a class="navbar-brand h1" href="">
             <span class="text-dark h4">Fit</span><span class="h4 finder">Finder</span>
         </a>
         <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-toggler-success" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,19 +41,19 @@ https://templatemo.com/tm-561-purple-buzz
             <div class="mx-xl-9 mb-2">
                 <ul class="nav navbar-nav d-flex justify-content-between mx-xl-5 text-center text-dark">
                     <li class="nav-item" style="padding: 10px; ">
-                        <a class="nav-link btn-outline-primary rounded-pill px-3" href="index.html">Home</a>
+                        <a class="nav-link btn-outline-primary rounded-pill px-3" href="/index/#">Home</a>
                     </li>
                     <li class="nav-item" style="padding: 10px">
-                        <a class="nav-link btn-outline-primary rounded-pill px-3" href="pricing.html">About Us</a>
+                        <a class="nav-link btn-outline-primary rounded-pill px-3" href="/index/#about">About Us</a>
                     </li>
                     <li class="nav-item" style="padding: 10px">
-                        <a class="nav-link btn-outline-primary rounded-pill px-3" href="pricing.html">Our Mission</a>
+                        <a class="nav-link btn-outline-primary rounded-pill px-3" href="/index/#mission">Our Mission</a>
                     </li>
                     <li class="nav-item" style="padding: 10px">
                         <a class="nav-link btn-outline-primary rounded-pill px-3" href="contact.html">Contact Us</a>
                     </li>
                     <li class="nav-item" style="padding: 10px">
-                        <a class="nav-link btn-outline-primary rounded-pill px-3" href="login.html">Contact</a>
+                        <a class="nav-link btn-outline-primary rounded-pill px-3" href="../login">Get Started</a>
                     </li>
                 </ul>
             </div>
@@ -62,21 +62,21 @@ https://templatemo.com/tm-561-purple-buzz
 </nav>
 <!-- Close Header -->
 
-    <center>
-        <form onsubmit="return false">
-            <h2 class="h2 text-center col-12 py-5 semi-bold-600">Login</h2>
-            <div class="form-floating">
+<center>
+    <form onsubmit="return false">
+        <h2 class="h2 text-center col-12 py-5 semi-bold-600">Login</h2>
+        <div class="form-floating">
             <input type="text" class="form-control light-300" id="username" name="inputusername" placeholder="Username">
-            </div>
-            <p></p>
-            <div class="form-floating">
+        </div>
+        <p></p>
+        <div class="form-floating">
             <input type="text" class="form-control light-300" id="password" name="inputpassword" placeholder="Password">
-            </div>
-            <p></p>
-            <button class="btn btn-primary rounded-pill btn-block shadow px-4 py-2" type="submit" onclick="login()">Login</button>
-            <p></p>
-        </form>
-    </center>
+        </div>
+        <p></p>
+        <button class="btn btn-primary rounded-pill btn-block shadow px-4 py-2" type="submit" onclick="login()">Login</button>
+        <p></p>
+    </form>
+</center>
 
 
 <!-- Start Footer -->
@@ -177,37 +177,37 @@ https://templatemo.com/tm-561-purple-buzz
 <!-- End Footer -->
 
 
-    <!-- Bootstrap -->
-    <script src="./js/bootstrap.bundle.min.js"></script>
-    <!-- Load jQuery require for isotope -->
-    <script src="./js/jquery.min.js"></script>
-    <!-- Isotope -->
-    <script src="./js/isotope.pkgd.js"></script>
-    <!-- Page Script -->
-    <script>
-        $(window).load(function() {
-            // init Isotope
-            var $projects = $('.projects').isotope({
-                itemSelector: '.project',
-                layoutMode: 'fitRows'
-            });
-            $(".filter-btn").click(function() {
-                var data_filter = $(this).attr("data-filter");
-                $projects.isotope({
-                    filter: data_filter
-                });
-                $(".filter-btn").removeClass("active");
-                $(".filter-btn").removeClass("shadow");
-                $(this).addClass("active");
-                $(this).addClass("shadow");
-                return false;
-            });
+<!-- Bootstrap -->
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<!-- Load jQuery require for isotope -->
+<script src="assets/js/jquery.min.js"></script>
+<!-- Isotope -->
+<script src="assets/js/isotope.pkgd.js"></script>
+<!-- Page Script -->
+<script>
+    $(window).load(function() {
+        // init Isotope
+        var $projects = $('.projects').isotope({
+            itemSelector: '.project',
+            layoutMode: 'fitRows'
         });
-    </script>
-    <!-- Templatemo -->
-    <script src="./js/templatemo.js"></script>
-    <!-- Custom -->
-    <script src="./js/custom.js"></script>
+        $(".filter-btn").click(function() {
+            var data_filter = $(this).attr("data-filter");
+            $projects.isotope({
+                filter: data_filter
+            });
+            $(".filter-btn").removeClass("active");
+            $(".filter-btn").removeClass("shadow");
+            $(this).addClass("active");
+            $(this).addClass("shadow");
+            return false;
+        });
+    });
+</script>
+<!-- Templatemo -->
+<script src="assets/js/templatemo.js"></script>
+<!-- Custom -->
+<script src="assets/js/custom.js"></script>
 
 </body>
 
