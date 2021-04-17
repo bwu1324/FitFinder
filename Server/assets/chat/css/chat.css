@@ -40,11 +40,6 @@ body {
     width: 100%;
 }
 
-#sender {
-    width: calc(100% - 100px);
-    margin: 10px;
-}
-
 #message {
     width: calc(100% - 100px);
     margin: 10px;
@@ -61,18 +56,37 @@ body {
 }
 
 .messageContainer {
-    height: 60px;
+    margin: 0px 0px 20px 0px;
+    float: left;
     width: 100%
 }
 
 .leftMessage {
+    text-align: left;
+    width: calc(100% - 20px);
     float: left;
-    height: 40px;
-    margin: 10px
+    margin-left: 20px;
 }
 
 .rightMessage {
+    text-align: right;
+    width: calc(100% - 20px);
     float: right;
-    height: 40px;
-    margin: 10px
+    margin-right: 20px;
+}
+
+.rightSender {
+    text-align: right;
+    width: calc(100% - 20px);
+    float: right;
+    margin-right: 20px;
+    height: 20px;
+}
+
+.leftSender {
+    text-align: left;
+    width: calc(100% - 20px);
+    float: left;
+    margin-left: 20px;
+    height: 20px;
 }
