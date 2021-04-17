@@ -1,0 +1,4 @@
+
+
+//center the login part, make the background a certain blue-ish color, add a space for username
+//add a space for password, add a space for location and interests and weight, etc???
