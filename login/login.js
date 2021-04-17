@@ -1,5 +1,4 @@
-const crypto = require('crypto')
 
-function login (username, password) {
-    
+function login () {
+    document.getElementByID()
 }
