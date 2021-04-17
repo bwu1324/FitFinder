@@ -9,6 +9,8 @@ function signup() {
         weight: document.getElementById('weightField').value,
     }
 
+    console.log(data)
+
     let error = false;
 
     if (data.zip === "" || data.weight === "") {

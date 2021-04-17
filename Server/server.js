@@ -179,6 +179,10 @@ app.post('/signup', (req, res) => {
                     name: data.name,
                     zip: data.zip,
                     weight: data.weight,
+                    pfpURL: "../pfpimages/standardimage.png",
+                    bio: "Edit your profile to add a bio!",
+                    posts: [],
+                    friends: []
                 }
 
                 // save user data,  apologize if things go wrong
