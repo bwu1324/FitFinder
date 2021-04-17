@@ -5,9 +5,10 @@ const crypto = require('crypto')
 const argon2 = require('argon2')
 const fs = require('fs')
 
-const secret = '0439868ec28dab59' //crypto.randomBytes(16)
+const secret = '0439868ec28dab59' //crypto.randomBytes(16)          // generate random server secret key for encrypting cookies
 
-function decryptCookie(data) {              // takes in session cookie, returns stringified json data
+// takes in session cookie, returns stringified json data
+function decryptCookie(data) {
     try {
         data = JSON.parse(Buffer.from(data, 'base64').toString('ascii'))
         const iv = Buffer.from(data.iv)
@@ -21,7 +22,8 @@ function decryptCookie(data) {              // takes in session cookie, returns 
     }
 }
 
-function encryptCookie(data) {              // takes in stringified user data, returns session cookie
+// takes in stringified user data, returns session cookie
+function encryptCookie(data) {
     try {
         const iv = crypto.randomBytes(16)
         const cipher = crypto.createCipheriv('aes-128-cbc', secret, iv)
@@ -34,7 +36,8 @@ function encryptCookie(data) {              // takes in stringified user data, r
     }
 }
 
-function createCookie(user) {               // takes in username, returns session cookie
+// takes in username, returns session cookie
+function createCookie(user) {
     const data = JSON.parse(fs.readFileSync('./userData/' + user + '.json'))
     const userData = {
         username: data.username,
@@ -43,7 +46,8 @@ function createCookie(user) {               // takes in username, returns sessio
     return encryptCookie(JSON.stringify(userData))
 }
 
-function findUser(session) {                // takes in session cookie, return promise. resolves to user object if found, undefined it not
+// takes in session cookie, return promise. resolves to user object if found, undefined it not
+function findUser(session) {
     return new Promise((resolve) => {
         try {
             const user = JSON.parse(decryptCookie(session))
@@ -73,75 +77,103 @@ app.use(cookieParser())
 app.use(bodyParser.json())
 
 
-app.get('/index', (req, res) => {            // homepage
+// homepage
+app.get('/index', (req, res) => {
     res.render('index')
 })
 
-app.get('/login', async (req, res) => {      // login page
-    const user = await findUser(req.cookies.session)    // check if user has valid session cookie, redirect to profile if yes
+// login page
+app.get('/login', async (req, res) => {
+    // check if user has valid session cookie, redirect to profile if yes
+    const user = await findUser(req.cookies.session)
     if (user) { res.redirect('/profile') }
-    else { res.render('login') }                        // otherwise, render page
+
+    // otherwise, render page
+    else { res.render('login') }
 })
 
+// signup page
 app.get('/signup', async (req, res) => {
-    const user = await findUser(req.cookies.session)    // check if user has valid session cookie, redirect to profile if yes
+    // check if user has valid session cookie, redirect to profile if yes
+    const user = await findUser(req.cookies.session)
     if (user) { res.redirect('/profile') }
-    else { res.render('signup') }                       // otherwise, render page
+
+    // otherwise, render page
+    else { res.render('signup') }
 })
 
+// profile page
 app.get('/profile', async (req, res) => {
-    const user = await findUser(req.cookies.session)    // check if user has valid session cookie, redirect to profile if yes
+    // check if user has valid session cookie, redirect to profile if yes
+    const user = await findUser(req.cookies.session)
     if (user) { res.render('profile', { user: user }) }
-    else { res.redirect('/index') }                     // otherwise, redirect to index
+
+    // otherwise, redirect to index
+    else { res.redirect('/index') }
 })
 
+// login form post req
+app.post('/login', async (req, res) => {
+    // grab the data
+    const data = req.body
 
-app.post('/login', async (req, res) => {                // login form post req
-    const data = req.body                                   // grab the data
+    // read the file, if error, it doesn't exist, send fail
     fs.readFile('./userData/' + data.username + '.json', async (err, user) => {
-        if (err) {                                          // read the file, if error, it doesn't exist, send fail
+        if (err) {
             res.send('fail')
             return
         }
-        try {                                               // otherwise, check if passwords match
-            const hash = JSON.parse(user).hash                  // hash stored in database
 
-            if (await argon2.verify(hash, data.password)) {     // compare
-                res.send(createCookie(data.username))               // if success, send session cookie
+        // otherwise, check if passwords match
+        try {
+            const hash = JSON.parse(user).hash
 
-            } else { res.send('fail') }                             // otherwise, send fail
+            // compare
+            if (await argon2.verify(hash, data.password)) {
+                // if success, send session cookie
+                res.send(createCookie(data.username))
+
+            } else { res.send('fail') }  // otherwise, send fail
 
 
         } catch (err) { res.send('fail') }
     })
 })
 
-app.post('/signup', (req, res) => {                     // signup form post req
-    const data = req.body                                   // grab the data
+// signup form post req
+app.post('/signup', (req, res) => {
+    // grab the data
+    const data = req.body
 
+    // read the file, if error, it doesn't exist, new user can be created
     fs.access('./userData/' + data.username + '.json', async (err) => {
-        if (err) {                                          // read the file, if error, it doesn't exist, new user can be created
+        if (err) {
             try {
-                const hash = await argon2.hash(data.password)    // hash the password
+                // hash the password
+                const hash = await argon2.hash(data.password)
 
-                const newUser = {                                // new user object
+                // new user object
+                const newUser = {
                     username: data.username,
                     hash: hash,
                     name: data.name
                 }
 
+                // save user data,  apologize if things go wrong
                 fs.writeFile('./userData/' + data.username + '.json', JSON.stringify(newUser), (error) => {
-                    if (error) {                                 // save user data
-                        res.send('error')                            // apologize if things go wrong
+                    if (error) {
+                        res.send('error')
+                        return
                     }
 
-                    res.send(createCookie(data.username))             // send session cookie
+                    // otherwise, send session cookie
+                    res.send(createCookie(data.username))
                 })
 
             } catch (err) { res.send('error') }
 
-        } else { res.send('exists') }                       // file could be read, therefore user alread exists, new user cannot be created
+        } else { res.send('exists') } // file could be read, therefore user alread exists, new user cannot be created
     })
 })
 
-app.listen(8080)
+app.listen(8080)    // start the server
