@@ -5,6 +5,7 @@
     <title>Purple Buzz HTML Template with Bootstrap 5 Beta 1</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="./login.js"></script>
     <link rel="apple-touch-icon" href="assets/img/apple-icon.png">
     <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.ico">
     <!-- Load Require CSS -->
@@ -62,17 +63,19 @@ https://templatemo.com/tm-561-purple-buzz
 <!-- Close Header -->
 
     <center>
-        <h2 class="h2 text-center col-12 py-5 semi-bold-600">Login</h2>
-        <div class="form-floating">
-          <input type="text" class="form-control light-300" id="floatingusername" name="inputusername" placeholder="Username">
-        </div>
-        <p></p>
-        <div class="form-floating">
-          <input type="text" class="form-control light-300" id="floatingemail" name="inputpassword" placeholder="Password">
-        </div>
-        <p></p>
-        <a href="#" class="btn btn-primary rounded-pill btn-block shadow px-4 py-2">Login</a>
-        <p></p>
+        <form onsubmit="return false">
+            <h2 class="h2 text-center col-12 py-5 semi-bold-600">Login</h2>
+            <div class="form-floating">
+            <input type="text" class="form-control light-300" id="username" name="inputusername" placeholder="Username">
+            </div>
+            <p></p>
+            <div class="form-floating">
+            <input type="text" class="form-control light-300" id="password" name="inputpassword" placeholder="Password">
+            </div>
+            <p></p>
+            <button class="btn btn-primary rounded-pill btn-block shadow px-4 py-2" type="submit" onclick="login()">Login</button>
+            <p></p>
+        </form>
     </center>
 
 
