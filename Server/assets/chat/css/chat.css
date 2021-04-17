@@ -1,0 +1,42 @@
+body {
+    padding: 0px;
+    margin: 0px;
+}
+
+#friends {
+    width: 15%;
+    background-color: aqua;
+    height: 100vh;
+    float: left;
+}
+
+.friend {
+    width: 100%
+}
+
+#chat {
+    float: left;
+    width: 85%;
+    background-color: azure;
+    margin: 0px;
+    height: 100vh;
+}
+
+#history {
+    height: calc(100vh - 60px);
+}
+
+#message-box {
+    height: 40px;
+    width: 100%;
+}
+
+#message {
+    width: calc(100% - 100px);
+    margin: 10px;
+}
+
+#message-send {
+    margin: 0px;
+    width: 50px;
+}

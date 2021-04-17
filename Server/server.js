@@ -4,6 +4,7 @@ const bodyParser = require('body-parser')
 const crypto = require('crypto')
 const argon2 = require('argon2')
 const fs = require('fs')
+const { fork } = require('child_process');
 
 const secret = '0439868ec28dab59' //crypto.randomBytes(16)          // generate random server secret key for encrypting cookies
 
@@ -118,6 +119,18 @@ app.get('/forum/:conversation/:page', (req, res) => {
 
 })
 
+// profile page
+app.get('/chat', async (req, res) => {
+    // check if user has valid session cookie, send chat page if yes
+    const user = await findUser(req.cookies.session)
+    if (user) { 
+        res.render('chat', { user: user }) 
+    }
+
+    // otherwise, redirect to index
+    else { res.redirect('/index') }
+})
+
 
 // login form post req
 app.post('/login', async (req, res) => {
@@ -184,3 +197,6 @@ app.post('/signup', (req, res) => {
 })
 
 app.listen(8080)    // start the server
+
+const websocket = fork('./websocket.js')
+websocket.send(secret)
