@@ -17,6 +17,10 @@ Table of contents
 8. Contact
 --------------------------------------------- */
 
+.finder {
+  color: #188080;
+}
+
 html {font-family: 'Open Sans', sans-serif;}
 /* Typography */
 p, a {font-weight: 400;}
@@ -40,7 +44,7 @@ p, a {font-weight: 400;}
   width: 150px;
   display:block;
   position: absolute;
-  border-bottom:  5px solid #6266ea;
+  border-bottom:  5px solid #0b3939;
   padding-top: .5em;
 }
 .typo-space-line-center::after {
@@ -51,7 +55,7 @@ p, a {font-weight: 400;}
 #main_nav .nav-item .nav-link:hover {color: #fff;}
 /* Home */
 #index_banner {
-  background-image: url('./../img/banner-bg-01.jpg');
+  background-image: url('./../img/fitfinder/stockgym4.jpg');
   background-position: center center; background-size: cover;
   height: 100%;
   min-height: 60vh;
