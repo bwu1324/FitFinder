@@ -114,6 +114,15 @@ app.get('/profile', async (req, res) => {
     else { res.redirect('/signup') }
 })
 
+app.get('/profileedit', async (req, res) => {
+    // check if user has valid session cookie, redirect to profile if yes
+    const user = await findUser(req.cookies.session)
+    if (user) { res.render('profileedit', { user: user }) }
+
+    // otherwise, redirect to signup
+    else { res.redirect('/signup') }
+})
+
 // forum page
 app.get('/forum', (req, res) => {
     res.render('forumHome')
