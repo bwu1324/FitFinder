@@ -23,6 +23,7 @@ function editProfile() {
     if (data.bio.length > 280) {
         document.getElementById('bioTooltip').textContent = "Bio is too long! Must be under 280 characters, but is " + data.bio.length + " characters long!"
         document.getElementById('bioTooltip').style.visibility = "visible"
+        error = true
     }
     else {
         document.getElementById('bioTooltip').style.visibility = "hidden"

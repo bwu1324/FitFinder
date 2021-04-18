@@ -195,7 +195,19 @@ app.get('/friends', async (req, res) => {
     // check if user has valid session cookie, send forum if yes
     const user = await authUser(req.cookies.session)
     if (user) {
-        res.render('friends', { friends: user.friends })
+        var friendRequests = []
+        for (let i = 0; i < user.requests.length; i++) {
+            var request = await findUser(user.requests[i])
+            friendRequests.push(request)
+        }
+
+        var friends = []
+        for (let i = 0; i < user.friends.length; i++) {
+            var request = await findUser(user.friends[i])
+            friends.push(request)
+        }
+        console.log(friends)
+        res.render('friends', { friendRequests: friendRequests, friends: friends })
     }
 
     // otherwise, redirect to signup
