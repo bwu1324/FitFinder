@@ -128,6 +128,30 @@ app.get('/forum', (req, res) => {
     res.render('forumHome')
 })
 
+
+// activity/request posting page
+app.get('/find-choose-activities', (req, res) => {
+    res.render('find-choose-activities')
+})
+
+
+// activity/request posting page
+app.get('/find-choose-city', (req, res) => {
+    res.render('find-choose-city')
+})
+
+
+// activity/request posting page
+app.get('/find-choose-location', (req, res) => {
+    res.render('find-choose-location')
+})
+
+
+// activity/request posting page
+app.get('/find-choose-timer', (req, res) => {
+    res.render('find-choose-timer')
+})
+
 app.get('/forum/:conversation/:page', async (req, res) => {
     // check if user has valid session cookie, send forum if yes
     const user = await findUser(req.cookies.session)
@@ -161,6 +185,7 @@ app.get('/chat/:friend', async (req, res) => {
     // otherwise, redirect to signup
     else { res.redirect('/signup') }
 })
+
 
 
 // login form post req
@@ -231,6 +256,13 @@ app.post('/signup', (req, res) => {
 
         } else { res.send('exists') } // file could be read, therefore user alread exists, new user cannot be created
     })
+})
+
+app.post('/profileedit', (req, res) => {
+    // grab the data
+    const data = req.body
+
+    // TODO Deal with things here Bennett
 })
 
 app.listen(8080)    // start the server

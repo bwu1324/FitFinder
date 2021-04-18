@@ -52,7 +52,7 @@
                         <a class="nav-link btn-outline-primary rounded-pill px-3" href="/friends">Friends</a>
                     </li>
                     <li class="nav-item" style="padding: 10px">
-                        <a class="nav-link btn-outline-primary rounded-pill px-3" href="/buddy">Find a Buddy</a>
+                        <a class="nav-link btn-outline-primary rounded-pill px-3" href="/find-choose-activities">Find a Buddy</a>
                     </li>
                 </ul>
             </div>
@@ -62,19 +62,26 @@
 <!-- Close Header -->
 
 <div class="container">
-    <div class="row" style="height: 100px">
+    <div class="row" style="height: 50px">
         <p></p><p></p><p></p>
         <div class="col-2"></div>
         <div class="col-3">
             <img style="border-radius: 50%; text-align: right; width: 200px; height: 200px" src="<%-user.pfpURL%>">
         </div>
-        <div class="col-2">
-            <h2><%- user.username%></h2>
-        </div>
         <div class="col-4">
+            <h2><%- user.name%></h2>
+        </div>
+        <div class="col-3">
             <a href="/profileedit">
                 <button class="btn btn-primary rounded-pill btn-block shadow px-4 py-2" style="">Edit Profile</button>
             </a>
+        </div>
+    </div>
+    <div class="row" style="height: 100px;">
+        <p></p><p></p><p></p>
+        <div class="col-5"></div>
+        <div class="col-7">
+            <h4>@<%-user.username%></h4>
         </div>
     </div>
     <div class="row">
