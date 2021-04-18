@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="./login.js"></script>
 
-    <script src="../global/js/global.js"></script>
     <link rel="apple-touch-icon" href="../global/img/fitfinder/favicon.png">
     <link rel="shortcut icon" type="image/x-icon" href="../global/img/fitfinder/favicon.png">
     <!-- Load Require CSS -->
@@ -105,9 +104,8 @@
             </div>
             <p></p>
             <div class="form-floating">
-                <input type="text" class="form-control light-300" id="password" name="inputpassword"
-                    placeholder="Password">
-                <center>
+                <input type="hidden"" class="form-control light-300" id="password" name="inputpassword" placeholder="Password">
+                <center> 
                     <div style="width: 35%">
                         <p id="passwordTooltip"
                             style="position: relative; text-align: left; color: red; visibility: hidden">Incorrect
@@ -227,14 +225,6 @@
     </footer>
     <!-- End Footer -->
 
-
-    <!-- Bootstrap -->
-    <script src="assets/js/bootstrap.bundle.min.js"></script>
-    <!-- Load jQuery require for isotope -->
-    <script src="assets/js/jquery.min.js"></script>
-    <!-- Isotope -->
-    <script src="assets/js/isotope.pkgd.js"></script>
-    <!-- Page Script -->
     <script>
         $(window).load(function () {
             // init Isotope

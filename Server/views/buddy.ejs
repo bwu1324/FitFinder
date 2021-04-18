@@ -74,9 +74,6 @@
                                 Log</a>
                         </li>
                         <li class="nav-item" style="padding: 10px">
-                            <a class="nav-link btn-outline-primary rounded-pill px-3" href="/forum">Forum</a>
-                        </li>
-                        <li class="nav-item" style="padding: 10px">
                             <a class="nav-link btn-outline-primary rounded-pill px-3" href="/friends">Friends</a>
                         </li>
                         <li class="nav-item" style="padding: 10px">
@@ -95,83 +92,84 @@
     </nav>
     <!-- Close Header -->
     <center>
-        <p>
-        </p>
-        <p>
-        </p>
-        <a class="btn btn-primary rounded-pill btn-block shadow px-4 py-2 fs-3" type="button" href="/findbuddy">Search</a>
         <br>
+        <br>
+        <a class="btn btn-primary rounded-pill btn-block shadow px-4 py-2 fs-3" type="button"
+            href="/findbuddy">Search</a>
+        <br>
+        <div class="slide-up">
+            <p></p>
+            <h2 class="h3 text-center col-12 py-5 semi-bold-600">1. Choose Activities</h2>
+            <div class="form-check display: d-inline-block">
+                <input class="form-check-input" type="checkbox" id="tennis">
+                <label class="form-check-label" for="defaultCheck1">
+                    Tennis
+                </label>
+            </div>
+            <p></p>
+            <div class="form-check display: d-inline-block">
+                <input class="form-check-input" type="checkbox" id="basketball">
+                <label class="form-check-label" for="defaultCheck2">
+                    Basketball
+                </label>
+            </div>
+            <p></p>
+            <div class="form-check display: d-inline-block">
+                <input class="form-check-input" type="checkbox" id="hiking">
+                <label class="form-check-label" for="defaultCheck3">
+                    Hiking
+                </label>
+            </div>
+            <p></p>
+            <div class="form-check display: d-inline-block">
+                <input class="form-check-input" type="checkbox" id="volleyball">
+                <label class="form-check-label" for="defaultCheck4">
+                    Volleyball
+                </label>
+            </div>
+            <p></p>
+            <div class="form-check display: d-inline-block">
+                <input class="form-check-input" type="checkbox" id="swimming">
+                <label class="form-check-label" for="defaultCheck5">
+                    Swimming
+                </label>
+            </div>
+            <p></p>
+            <div class="form-check display: d-inline-block">
+                <input class="form-check-input" type="checkbox" id="badminton">
+                <label class="form-check-label" for="defaultCheck6">
+                    Badminton
+                </label>
+            </div>
+            <p></p>
+            <p></p>
             <div class="slide-up">
                 <p></p>
-                <h2 class="h3 text-center col-12 py-5 semi-bold-600">1. Choose Activities</h2>
+                <h2 class="h3 text-center col-12 py-5 semi-bold-600">2. Choose Preferred Location</h2>
                 <div class="form-check display: d-inline-block">
-                    <input class="form-check-input" type="checkbox" id="tennis">
-                    <label class="form-check-label" for="defaultCheck1">
-                        Tennis
-                    </label>
-                </div>
-                <p></p>
-                <div class="form-check display: d-inline-block">
-                    <input class="form-check-input" type="checkbox"  id="basketball">
-                    <label class="form-check-label" for="defaultCheck2">
-                        Basketball
-                    </label>
-                </div>
-                <p></p>
-                <div class="form-check display: d-inline-block">
-                    <input class="form-check-input" type="checkbox"  id="hiking">
-                    <label class="form-check-label" for="defaultCheck3">
-                        Hiking
-                    </label>
-                </div>
-                <p></p>
-                <div class="form-check display: d-inline-block">
-                    <input class="form-check-input" type="checkbox"  id="volleyball">
-                    <label class="form-check-label" for="defaultCheck4">
-                        Volleyball
-                    </label>
-                </div>
-                <p></p>
-                <div class="form-check display: d-inline-block">
-                    <input class="form-check-input" type="checkbox"  id="swimming">
-                    <label class="form-check-label" for="defaultCheck5">
-                        Swimming
-                    </label>
-                </div>
-                <p></p>
-                <div class="form-check display: d-inline-block">
-                    <input class="form-check-input" type="checkbox"  id="badminton">
-                    <label class="form-check-label" for="defaultCheck6">
-                        Badminton
-                    </label>
+                    <input class="form-control light-300" style="width: 500px;" type="text" id="location" ,
+                        placeholder="Address of the place you would like to meet up">
                 </div>
                 <p></p>
                 <p></p>
                 <div class="slide-up">
                     <p></p>
-                    <h2 class="h3 text-center col-12 py-5 semi-bold-600">2. Choose Preferred Location</h2>
-                    <div class="form-check display: d-inline-block">
-                        <input class="form-control light-300" style="width: 500px;" type="text"  id="location", placeholder="Address of the place you would like to meet up">
-                    </div>
+                    <h2 class="h3 text-center col-12 py-5 semi-bold-600">3. Choose Prefered Time</h2>
+                    <p>When would you prefer to play?</p>
+                    <label class="form-check-label" for="startDate">Starting from: </label>
+                    <input id="startDate" type="datetime-local">
+                    <br>
+                    <br>
+                    <label class="form-check-label" for="endDate">To: </label>
+                    <input id="endDate" type="datetime-local">
                     <p></p>
+                    <hr style="width: 50%; justify-content: center">
                     <p></p>
-                    <div class="slide-up">
-                        <p></p>
-                        <h2 class="h3 text-center col-12 py-5 semi-bold-600">3. Choose Prefered Time</h2>
-                        <p>When would you prefer to play?</p>
-                        <label class="form-check-label" for="startDate">Starting from: </label>
-                        <input id="startDate" type="datetime-local">
-                        <br>
-                        <br>
-                        <label class="form-check-label" for="endDate">To: </label>
-                        <input id="endDate" type="datetime-local">
-                        <p></p>
-                        <hr style="width: 50%; justify-content: center">
-                        <p></p>
-                        <button class="btn btn-primary rounded-pill btn-block shadow px-4 py-2 fs-3" type="button" onclick="postBuddyRequest()">Post</button>
-                        <p></p>
-                    </div>
+                    <button class="btn btn-primary rounded-pill btn-block shadow px-4 py-2 fs-3" type="button"
+                        onclick="postBuddyRequest()">Post</button>
+                    <p></p>
                 </div>
+            </div>
     </center>
 </body>
 
