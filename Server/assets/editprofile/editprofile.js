@@ -1,6 +1,6 @@
 
-function profileEdit() {
-    const data = {                                                  // grab username and password
+function editProfile() {
+    const data = {                                                  // grab data
         name: document.getElementById('name').value,
         bio: document.getElementById('bio').value
     }
@@ -24,6 +24,13 @@ function profileEdit() {
     xhr.send(JSON.stringify(data));
 
     xhr.onreadystatechange = function () {                          // wait for response
-        // TODO Button does nothing right now
+        if (xhr.readyState == 4) {
+            const response = xhr.responseText
+            if (response === 'error') {                            // alert when there is an issue or username exists
+                alert('There was an error editing your profile, we apologize for the inconvinience')
+            } else if (response === 'success') {
+                window.location.replace('/profile')
+            } 
+        }
     };
 }

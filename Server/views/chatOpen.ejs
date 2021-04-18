@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="./chat.css">
     <script src="./chat.js"></script>
     <script src="../global/js/global.js"></script>
-    
+
     <link rel="apple-touch-icon" href="../global/img/fitfinder/favicon.png">
     <link rel="shortcut icon" type="image/x-icon" href="../global/img/fitfinder/favicon.png">
     <!-- Load Require CSS -->
@@ -29,13 +29,13 @@
     <script src="../global/js/isotope.pkgd.js"></script>
     <!-- Page Script -->
     <script>
-        $(window).load(function() {
+        $(window).load(function () {
             // init Isotope
             var $projects = $('.projects').isotope({
                 itemSelector: '.project',
                 layoutMode: 'fitRows'
             });
-            $(".filter-btn").click(function() {
+            $(".filter-btn").click(function () {
                 var data_filter = $(this).attr("data-filter");
                 $projects.isotope({
                     filter: data_filter
@@ -53,158 +53,159 @@
 
 <body>
     <div>
-    <!-- Header -->
-    <nav id="main_nav" class="navbar navbar-expand-lg navbar-light bg-white shadow">
-        <div class="container d-flex justify-content-between align-items-center">
-            <a class="navbar-brand h1" href="">
-                <span class="text-dark h4">Fit</span><span class="h4 finder">Finder</span>
-            </a>
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbar-toggler-success" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+        <!-- Header -->
+        <nav id="main_nav" class="navbar navbar-expand-lg navbar-light bg-white shadow">
+            <div class="container d-flex justify-content-between align-items-center">
+                <a class="navbar-brand h1" href="/profile">
+                    <span class="text-dark h4">Fit</span><span class="h4 finder">Finder</span>
+                </a>
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbar-toggler-success" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-            <div class="align-self-center collapse navbar-collapse flex-fill  d-lg-flex justify-content-lg-between"
-                id="navbar-toggler-success">
-                <div class="mx-xl-9 mb-2">
-                    <ul class="nav navbar-nav d-flex justify-content-between mx-xl-5 text-center text-dark">
-                        <li class="nav-item" style="padding: 10px; ">
-                            <a class="nav-link btn-outline-primary rounded-pill px-3" href="/profile">Profile</a>
-                        </li>
-                        <li class="nav-item" style="padding: 10px">
-                            <a class="nav-link btn-outline-primary rounded-pill px-3" href="/logger">Exercise Log</a>
-                        </li>
-                        <li class="nav-item" style="padding: 10px">
-                            <a class="nav-link btn-outline-primary rounded-pill px-3" href="/forum">Forum</a>
-                        </li>
-                        <li class="nav-item" style="padding: 10px">
-                            <a class="nav-link btn-outline-primary rounded-pill px-3" href="/friends">Friends</a>
-                        </li>
-                        <li class="nav-item" style="padding: 10px">
-                            <a class="nav-link btn-outline-primary rounded-pill px-3" href="/chat">Chat</a>
-                        </li>
-                        <li class="nav-item" style="padding: 10px">
-                            <a class="nav-link btn-outline-primary rounded-pill px-3" href="/buddy">Find a Buddy</a>
-                        </li>
-                        <li class="nav-item" style="padding: 10px">
-                            <a class="nav-link btn-outline-primary rounded-pill px-3" onclick="logout()">Logout</a>
-                        </li>
-                    </ul>
+                <div class="align-self-center collapse navbar-collapse flex-fill  d-lg-flex justify-content-lg-between"
+                    id="navbar-toggler-success">
+                    <div class="mx-xl-9 mb-2">
+                        <ul class="nav navbar-nav d-flex justify-content-between mx-xl-5 text-center text-dark">
+                            <li class="nav-item" style="padding: 10px; ">
+                                <a class="nav-link btn-outline-primary rounded-pill px-3" href="/profile">Profile</a>
+                            </li>
+                            <li class="nav-item" style="padding: 10px">
+                                <a class="nav-link btn-outline-primary rounded-pill px-3" href="/logger">Exercise
+                                    Log</a>
+                            </li>
+                            <li class="nav-item" style="padding: 10px">
+                                <a class="nav-link btn-outline-primary rounded-pill px-3" href="/forum">Forum</a>
+                            </li>
+                            <li class="nav-item" style="padding: 10px">
+                                <a class="nav-link btn-outline-primary rounded-pill px-3" href="/friends">Friends</a>
+                            </li>
+                            <li class="nav-item" style="padding: 10px">
+                                <a class="nav-link btn-outline-primary rounded-pill px-3" href="/chat">Chat</a>
+                            </li>
+                            <li class="nav-item" style="padding: 10px">
+                                <a class="nav-link btn-outline-primary rounded-pill px-3" href="/buddy">Find a Buddy</a>
+                            </li>
+                            <li class="nav-item" style="padding: 10px">
+                                <a class="nav-link btn-outline-primary rounded-pill px-3" onclick="logout()">Logout</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
+        </nav>
+        <!-- Close Header -->
+
+        <div id="friends">
+            <% friends.forEach(function(friend){ %>
+                <a class="friendLink" href="./<%-friend%>">
+                    <div class="friend">
+                        <img class='friendProfile' src="../global/profile/<%- friend %>.png">
+                        <h5 class='friendName'>
+                            <%-friend%>
+                        </h5>
+                    </div>
+                </a>
+                <% }); %>
         </div>
-    </nav>
-    <!-- Close Header -->
+        <div id="chat" onload="connect()">
+            <div id="history-container">
+                <div id="history">
+                    <div class="messageContainer">
+                        <div class="rightSender">Bob</div>
+                        <div class="rightMessage">This is a message</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="rightSender">Bob</div>
+                        <div class="rightMessage">Hi</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="rightSender">Bob</div>
+                        <div class="rightMessage">asdf</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="rightSender">Bob</div>
+                        <div class="rightMessage">asdf</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="rightSender">Bob</div>
+                        <div class="rightMessage">asdf</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="rightSender">Bob</div>
+                        <div class="rightMessage">asdf</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="rightSender">Bob</div>
+                        <div class="rightMessage">asdf</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="rightSender">Bob</div>
+                        <div class="rightMessage">asdf</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="leftSender">Joe</div>
+                        <div class="leftMessage">This is a message</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="leftSender">Joe</div>
+                        <div class="leftMessage">This is a nother</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="leftSender">Joe</div>
+                        <div class="leftMessage">Weee</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="rightSender">Bob</div>
+                        <div class="rightMessage">Sending messages is fun</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="leftSender">Joe</div>
+                        <div class="leftMessage">Sending messages is fun</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="leftSender">Joe</div>
+                        <div class="leftMessage">Sending messages is fun</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="leftSender">Joe</div>
+                        <div class="leftMessage">Sending messages is fun</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="leftSender">Joe</div>
+                        <div class="leftMessage">Sending messages is fun</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="rightSender">Bob</div>
+                        <div class="rightMessage">Weeeee</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="rightSender">Bob</div>
+                        <div class="rightMessage">Weeeee</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="rightSender">Bob</div>
+                        <div class="rightMessage">Weeeee</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="rightSender">Bob</div>
+                        <div class="rightMessage">Weeeee</div>
+                    </div>
+                    <div class="messageContainer">
+                        <div class="rightSender">Bob</div>
+                        <div class="rightMessage">Weeeee</div>
+                    </div>
 
-    <div id="friends">
-        <% friends.forEach(function(friend){ %>
-            <a class="friendLink" href="./<%-friend%>">
-                <div class="friend">
-                    <img class='friendProfile' src="../global/profile/<%- friend %>.png">
-                    <h5 class='friendName'>
-                        <%-friend%>
-                    </h5>
                 </div>
-            </a>
-        <% }); %>
-    </div>
-    <div id="chat" onload="connect()">
-        <div id="history-container">
-            <div id="history">
-                <div class="messageContainer">
-                    <div class="rightSender">Bob</div>
-                    <div class="rightMessage">This is a message</div>
-                </div>
-                <div class="messageContainer">
-                    <div class="rightSender">Bob</div>
-                    <div class="rightMessage">Hi</div>
-                </div>
-                <div class="messageContainer">
-                    <div class="rightSender">Bob</div>
-                    <div class="rightMessage">asdf</div>
-                </div>
-                <div class="messageContainer">
-                    <div class="rightSender">Bob</div>
-                    <div class="rightMessage">asdf</div>
-                </div>
-                <div class="messageContainer">
-                    <div class="rightSender">Bob</div>
-                    <div class="rightMessage">asdf</div>
-                </div>
-                <div class="messageContainer">
-                    <div class="rightSender">Bob</div>
-                    <div class="rightMessage">asdf</div>
-                </div>
-                <div class="messageContainer">
-                    <div class="rightSender">Bob</div>
-                    <div class="rightMessage">asdf</div>
-                </div>
-                <div class="messageContainer">
-                    <div class="rightSender">Bob</div>
-                    <div class="rightMessage">asdf</div>
-                </div>
-                <div class="messageContainer">
-                    <div class="leftSender">Joe</div>
-                    <div class="leftMessage">This is a message</div>
-                </div>
-                <div class="messageContainer">
-                    <div class="leftSender">Joe</div>
-                    <div class="leftMessage">This is a nother</div>
-                </div>
-                <div class="messageContainer">
-                    <div class="leftSender">Joe</div>
-                    <div class="leftMessage">Weee</div>
-                </div>
-                <div class="messageContainer">
-                    <div class="rightSender">Bob</div>
-                    <div class="rightMessage">Sending messages is fun</div>
-                </div>
-                <div class="messageContainer">
-                    <div class="leftSender">Joe</div>
-                    <div class="leftMessage">Sending messages is fun</div>
-                </div>
-                <div class="messageContainer">
-                    <div class="leftSender">Joe</div>
-                    <div class="leftMessage">Sending messages is fun</div>
-                </div>
-                <div class="messageContainer">
-                    <div class="leftSender">Joe</div>
-                    <div class="leftMessage">Sending messages is fun</div>
-                </div>
-                <div class="messageContainer">
-                    <div class="leftSender">Joe</div>
-                    <div class="leftMessage">Sending messages is fun</div>
-                </div>
-                <div class="messageContainer">
-                    <div class="rightSender">Bob</div>
-                    <div class="rightMessage">Weeeee</div>
-                </div>
-                <div class="messageContainer">
-                    <div class="rightSender">Bob</div>
-                    <div class="rightMessage">Weeeee</div>
-                </div>
-                <div class="messageContainer">
-                    <div class="rightSender">Bob</div>
-                    <div class="rightMessage">Weeeee</div>
-                </div>
-                <div class="messageContainer">
-                    <div class="rightSender">Bob</div>
-                    <div class="rightMessage">Weeeee</div>
-                </div>
-                <div class="messageContainer">
-                    <div class="rightSender">Bob</div>
-                    <div class="rightMessage">Weeeee</div>
-                </div>
-
             </div>
-        </div>
-        <form id='message-box' onsubmit="return false">
-            <input type="text" id="message">
+            <form id='message-box' onsubmit="return false">
+                <input type="text" id="message">
 
-            <button type="submit" id="message-send" onclick="send()">Send</button>
-        </form>
-    </div>
+                <button type="submit" id="message-send" onclick="send()">Send</button>
+            </form>
+        </div>
 </body>
 
 </html>

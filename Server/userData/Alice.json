@@ -1,1 +1,1 @@
-{"username":"Alice","hash":"$argon2i$v=19$m=4096,t=3,p=1$xo/3e3M4eZHI7NmUmPYMyA$vQEFYCjkptsIFwsER+YoFFs84m+2HspMB7C9LdAvXxE","name":"Alice","zip":"123123","friends":["Bob", "Charles"]}
+{"username":"Alice","hash":"$argon2i$v=19$m=4096,t=3,p=1$6OS5t4N3cyNQAM/gPJp4Ww$dFpOn5v0I441gghdsjmTxunApTx4WCYi8NCm9t8T89M","name":"AliceNY","zip":"123123","weight":"123","friends":[],"posts":[]}

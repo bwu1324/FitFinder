@@ -6,6 +6,8 @@ const argon2 = require('argon2')
 const fs = require('fs')
 const { fork } = require('child_process');
 
+const defaultpp = fs.readFileSync('./assets/global/default.png')
+
 const secret = '0439868ec28dab59' //crypto.randomBytes(16)          // generate random server secret key for encrypting cookies
 
 // takes in session cookie, returns stringified json data
@@ -135,10 +137,11 @@ app.get('/profile', async (req, res) => {
     else { res.redirect('/signup') }
 })
 
-app.get('/profileedit', async (req, res) => {
+// profile edit page
+app.get('/editprofile', async (req, res) => {
     // check if user has valid session cookie, redirect to profile if yes
-    const user = await findUser(req.cookies.session)
-    if (user) { res.render('profileedit', { user: user }) }
+    const user = await authUser(req.cookies.session)
+    if (user) { res.render('editprofile', { user: user }) }
 
     // otherwise, redirect to signup
     else { res.redirect('/signup') }
@@ -172,6 +175,7 @@ app.get('/find-choose-location', (req, res) => {
 app.get('/find-choose-timer', (req, res) => {
     res.render('find-choose-timer')
 })
+
 
 app.get('/forum/:conversation/:page', async (req, res) => {
     // check if user has valid session cookie, send forum if yes
@@ -231,8 +235,6 @@ app.get('/chat/:friend', async (req, res) => {
     else { res.redirect('/signup') }
 })
 
-
-
 // login form post req
 app.post('/login', async (req, res) => {
     // grab the data
@@ -280,6 +282,8 @@ app.post('/signup', (req, res) => {
                     name: data.name,
                     zip: data.zip,
                     weight: data.weight,
+                    friends: [],
+                    posts: [],
                 }
 
                 // save user data,  apologize if things go wrong
@@ -288,6 +292,8 @@ app.post('/signup', (req, res) => {
                         res.send('error')
                         return
                     }
+
+                    fs.writeFile('./assets/global/profile/' + data.username + '.png', defaultpp, () => {} )
 
                     // otherwise, send session cookie
                     res.send(createCookie(data.username))
@@ -350,6 +356,30 @@ app.post('/acceptFriend', async (req, res) => {
     }
 
     // send error
+    else { res.send('error') }
+})
+
+// profile edit post req
+app.post('/editprofile', async (req, res) => {
+    // check if user has valid session cookie, redirect to profile if yes
+    const user = await authUser(req.cookies.session)
+    if (user) { 
+        const data = req.body
+
+        user.bio = data.bio
+        user.name = data.name
+
+        fs.writeFile('./userData/' + user.username + '.json', JSON.stringify(user), (error) => {
+            if (error) { 
+                res.send('error') 
+                return
+            }
+
+            res.send('success')
+        })
+    }
+
+    // otherwise, redirect to signup
     else { res.send('error') }
 })
 

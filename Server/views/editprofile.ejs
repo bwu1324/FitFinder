@@ -1,14 +1,13 @@
 <!DOCTYPE html>
+<html lang="en">
 
 <head>
     <title>FitFinder</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="./editprofile.js"></script>
 
-    <link rel="stylesheet" href="./friends.css">
-    <script src="./friends.js"></script>
     <script src="../global/js/global.js"></script>
-
     <link rel="apple-touch-icon" href="../global/img/fitfinder/favicon.png">
     <link rel="shortcut icon" type="image/x-icon" href="../global/img/fitfinder/favicon.png">
     <!-- Load Require CSS -->
@@ -49,11 +48,9 @@
         });
     </script>
 </head>
-<html>
 
 <body>
-    <div>
-        <!-- Header -->
+    <!-- Header -->
     <nav id="main_nav" class="navbar navbar-expand-lg navbar-light bg-white shadow">
         <div class="container d-flex justify-content-between align-items-center">
             <a class="navbar-brand h1" href="/profile">
@@ -98,10 +95,50 @@
     </nav>
     <!-- Close Header -->
 
+    <center>
         <form onsubmit="return false">
-            <input id="request">
-            <button type="submit" onclick="sendRequest()">Request</button>
+            <h2 class="h2 text-center col-12 py-5 semi-bold-600">Edit Profile</h2>
+            <div class="form-floating">
+                <input type="text" class="form-control light-300" id="name" name="name" placeholder="Full Name">
+            </div>
+            <p></p>
+            <div class="form-floating">
+                <input type="text" class="form-control light-300" id="bio" name="bio"
+                    placeholder="Bio (max 280 characters)">
+                <center>
+                    <div style="width: 35%">
+                        <p id="bioTooltip" style="position: relative; text-align: left; color: red; visibility: hidden">
+                            Bio is too long! Must be under 280 characters, but is 300 characters long!</p>
+                    </div>
+                </center>
+            </div>
+            <p></p>
+            <button class="btn btn-primary rounded-pill btn-block shadow px-4 py-2" type="submit"
+                onclick="editProfile()">Save Changes</button>
+            <p></p>
         </form>
+    </center>
+
+    <script>
+        $(window).load(function () {
+            // init Isotope
+            var $projects = $('.projects').isotope({
+                itemSelector: '.project',
+                layoutMode: 'fitRows'
+            });
+            $(".filter-btn").click(function () {
+                var data_filter = $(this).attr("data-filter");
+                $projects.isotope({
+                    filter: data_filter
+                });
+                $(".filter-btn").removeClass("active");
+                $(".filter-btn").removeClass("shadow");
+                $(this).addClass("active");
+                $(this).addClass("shadow");
+                return false;
+            });
+        });
+    </script>
 </body>
 
 </html>
