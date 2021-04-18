@@ -281,6 +281,7 @@ app.post('/signup', (req, res) => {
                     name: data.name,
                     zip: data.zip,
                     weight: data.weight,
+                    bio: "Edit your profile to set your bio",
                     friends: [],
                     posts: [],
                     requests: []
@@ -343,7 +344,7 @@ app.post('/reqFriend', async (req, res) => {
                 if (newFriend.requests[i].username === user.username) {
                     found = true
                     res.send('sent')
-                } 
+                }
             }
 
             if (!found) {
@@ -442,7 +443,7 @@ app.post('/findbuddy', async (req, res) => {
                     }
                 }
             }
-            
+
             var matchInterest = []
             for (let i = 0; i < matchLocation.length; i++) {
                 if (getMatch(matchLocation[i].activities, data.activities).length > 0) {
@@ -456,7 +457,7 @@ app.post('/findbuddy', async (req, res) => {
                     match.push(matchInterest[i])
                 }
             }
-            
+
             res.send(JSON.stringify({ date: match }))
         })
     }

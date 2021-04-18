@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+
+<head style="background-color:blue">
+    <title>Purple Buzz - Contact Page</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="apple-touch-icon" href="assets/img/apple-icon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.ico">
+    <!-- Load Require CSS -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font CSS -->
+    <link href="assets/css/boxicon.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Load Tempalte CSS -->
+    <link rel="stylesheet" href="assets/css/templatemo.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/custom.css">
+    <link rel="stylesheet" href="assets/css/chat.css">
+    <!--
+
+    TemplateMo 561 Purple Buzz
+
+    https://templatemo.com/tm-561-purple-buzz
+
+    -->
+</head>
+<html>
+
+<body>
+    <!-- Header -->
+    <nav id="main_nav" class="navbar navbar-expand-lg navbar-light bg-white shadow">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a class="navbar-brand h1" href="/profile">
+                <span class="text-dark h4">Fit</span><span class="h4 finder">Finder</span>
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbar-toggler-success" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="align-self-center collapse navbar-collapse flex-fill  d-lg-flex justify-content-lg-between"
+                 id="navbar-toggler-success">
+                <div class="mx-xl-9 mb-2">
+                    <ul class="nav navbar-nav d-flex justify-content-between mx-xl-5 text-center text-dark">
+                        <li class="nav-item" style="padding: 10px; ">
+                            <a class="nav-link btn-outline-primary rounded-pill px-3" href="/profile">Profile</a>
+                        </li>
+                        <li class="nav-item" style="padding: 10px">
+                            <a class="nav-link btn-outline-primary rounded-pill px-3" href="/logger">Exercise
+                                Log</a>
+                        </li>
+                        <li class="nav-item" style="padding: 10px">
+                            <a class="nav-link btn-outline-primary rounded-pill px-3" href="/forum">Forum</a>
+                        </li>
+                        <li class="nav-item" style="padding: 10px">
+                            <a class="nav-link btn-outline-primary rounded-pill px-3" href="/friends">Friends</a>
+                        </li>
+                        <li class="nav-item" style="padding: 10px">
+                            <a class="nav-link btn-outline-primary rounded-pill px-3" href="/chat">Chat</a>
+                        </li>
+                        <li class="nav-item" style="padding: 10px">
+                            <a class="nav-link btn-outline-primary rounded-pill px-3" href="/buddy">Find a Buddy</a>
+                        </li>
+                        <li class="nav-item" style="padding: 10px">
+                            <a class="nav-link btn-outline-primary rounded-pill px-3" onclick="logout()">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- Close Header -->
+
+    <div id="friends">
+        <a class="friendLink" href="#"> <!--href="./<%-friend%>"-->
+            <div class="friend">
+                <img class='friendProfile' src="assets/fonts/img/recent-work-06.jpg"> <!--src="../global/profile/<%- friend %>.png"-->
+                <h5 class='friendName'>
+                    <%-friend%>
+                </h5>
+            </div>
+        </a>
+    </div>
+    <div id="chat" onload="connect()">
+        <div id="history-container">
+            <div id="history">
+                <div class="messageContainer">
+                    <div class="rightSender">Bob</div>
+                    <div class="rightMessage">This is a message</div>
+                </div>
+                <div class="messageContainer">
+                    <div class="rightSender">Bob</div>
+                    <div class="rightMessage">Hi</div>
+                </div>
+                <div class="messageContainer">
+                    <div class="rightSender">Bob</div>
+                    <div class="rightMessage">asdf</div>
+                </div>
+                <div class="messageContainer">
+                    <div class="rightSender">Bob</div>
+                    <div class="rightMessage">asdf</div>
+                </div>
+                <div class="messageContainer">
+                    <div class="rightSender">Bob</div>
+                    <div class="rightMessage">asdf</div>
+                </div>
+                <div class="messageContainer">
+                    <div class="rightSender">Bob</div>
+                    <div class="rightMessage">asdf</div>
+                </div>
+                <div class="messageContainer">
+                    <div class="rightSender">Bob</div>
+                    <div class="rightMessage">asdf</div>
+                </div>
+                <div class="messageContainer">
+                    <div class="rightSender">Bob</div>
+                    <div class="rightMessage">asdf</div>
+                </div>
+                <div class="messageContainer">
+                    <div class="leftSender">Joe</div>
+                    <div class="leftMessage">This is a message</div>
+                </div>
+                <div class="messageContainer">
+                    <div class="leftSender">Joe</div>
+                    <div class="leftMessage">This is a nother</div>
+                </div>
+                <div class="messageContainer">
+                    <div class="leftSender">Joe</div>
+                    <div class="leftMessage">Weee</div>
+                </div>
+                <div class="messageContainer">
+                    <div class="rightSender">Bob</div>
+                    <div class="rightMessage">Sending messages is fun</div>
+                </div>
+                <div class="messageContainer">
+                    <div class="leftSender">Joe</div>
+                    <div class="leftMessage">Sending messages is fun</div>
+                </div>
+                <div class="messageContainer">
+                    <div class="leftSender">Joe</div>
+                    <div class="leftMessage">Sending messages is fun</div>
+                </div>
+                <div class="messageContainer">
+                    <div class="leftSender">Joe</div>
+                    <div class="leftMessage">Sending messages is fun</div>
+                </div>
+                <div class="messageContainer">
+                    <div class="leftSender">Joe</div>
+                    <div class="leftMessage">Sending messages is fun</div>
+                </div>
+                <div class="messageContainer">
+                    <div class="rightSender">Bob</div>
+                    <div class="rightMessage">Weeeee</div>
+                </div>
+                <div class="messageContainer">
+                    <div class="rightSender">Bob</div>
+                    <div class="rightMessage">Weeeee</div>
+                </div>
+                <div class="messageContainer">
+                    <div class="rightSender">Bob</div>
+                    <div class="rightMessage">Weeeee</div>
+                </div>
+                <div class="messageContainer">
+                    <div class="rightSender">Bob</div>
+                    <div class="rightMessage">Weeeee</div>
+                </div>
+                <div class="messageContainer">
+                    <div class="rightSender" >Bob</div>
+                    <div class="rightMessage">Weeeee</div>
+                </div>
+
+            </div>
+        </div>
+        <form id='message-box' onsubmit="return false">
+            <input type="text" class="form-control light-300" id="message" name="inputpassword" placeholder="Message">
+            <button class="btn btn-primary rounded-pill btn-block shadow px-1 py-1" type="submit" id="message-send" onclick="send()">Send</button>
+            <p></p>
+        </form>
+    </div>
+</body>
+
