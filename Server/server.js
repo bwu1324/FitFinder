@@ -170,6 +170,10 @@ app.get('/logger', async (req, res) => {
     else { res.redirect('/signup') }
 })
 
+app.get('/activitylogger', (req, res) => {
+    res.render('activitylogger')
+})
+
 // forum page
 app.get('/forum', (req, res) => {
     res.render('forumHome')
