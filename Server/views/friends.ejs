@@ -5,7 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="./chat.css">
+    <link rel="stylesheet" href="./friends.css">
+    <script src="./friends.js"></script>
     <script src="../global/js/global.js"></script>
 
     <link rel="apple-touch-icon" href="../global/img/fitfinder/favicon.png">
@@ -97,21 +98,10 @@
         </nav>
         <!-- Close Header -->
 
-        <div id="friends">
-            <% friends.forEach(function(friend){ %>
-                <a class="friendLink" href="./<%-friend%>">
-                    <div class="friend">
-                        <img class='friendProfile' src="../global/profile/<%- friend %>.png">
-                        <h5 class='friendName'>
-                            <%-friend%>
-                        </h5>
-                    </div>
-                </a>
-            <% }); %>
-        </div>
-        <div id="chat">
-
-        </div>
+        <form onsubmit="return false"> 
+            <input id="request">
+            <button type="submit" onclick="sendRequest()">Request</button>
+        </form>
 </body>
 
 </html>

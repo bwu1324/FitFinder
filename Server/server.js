@@ -9,7 +9,7 @@ const { fork } = require('child_process');
 const secret = '0439868ec28dab59' //crypto.randomBytes(16)          // generate random server secret key for encrypting cookies
 
 // takes in session cookie, returns stringified json data
-function decryptCookie(data) {
+function decryptCookie (data) {
     try {
         data = JSON.parse(Buffer.from(data, 'base64').toString('ascii'))
         const iv = Buffer.from(data.iv)
@@ -24,7 +24,7 @@ function decryptCookie(data) {
 }
 
 // takes in stringified user data, returns session cookie
-function encryptCookie(data) {
+function encryptCookie (data) {
     try {
         const iv = crypto.randomBytes(16)
         const cipher = crypto.createCipheriv('aes-128-cbc', secret, iv)
@@ -38,7 +38,7 @@ function encryptCookie(data) {
 }
 
 // takes in username, returns session cookie
-function createCookie(user) {
+function createCookie (user) {
     const data = JSON.parse(fs.readFileSync('./userData/' + user + '.json'))
     const userData = {
         username: data.username,
@@ -48,7 +48,7 @@ function createCookie(user) {
 }
 
 // takes in session cookie, return promise. resolves to user object if found, undefined it not
-function findUser(session) {
+function authUser (session) {
     return new Promise((resolve) => {
         try {
             const user = JSON.parse(decryptCookie(session))
@@ -69,6 +69,27 @@ function findUser(session) {
     })
 }
 
+function findUser (username) {
+    return new Promise((resolve) => {
+        try {
+            fs.access('./userData/' + username + '.json', (err) => {
+                if (err) {
+                    resolve(undefined)
+                    return
+                }
+                fs.readFile('./userData/' + username + '.json', (error, data) => {
+                    if (error) {
+                        resolve(undefined)
+                        return
+                    }
+                    resolve(JSON.parse(data))
+                })
+            })
+        } catch { resolve(undefined) }
+    })
+}
+
+function sha (input) { return crypto.createHash('sha256').update(input).digest('hex') }
 
 // setting up express
 const app = express()
@@ -87,7 +108,7 @@ app.get('/index', (req, res) => {
 // login page
 app.get('/login', async (req, res) => {
     // check if user has valid session cookie, redirect to profile if yes
-    const user = await findUser(req.cookies.session)
+    const user = await authUser(req.cookies.session)
     if (user) { res.redirect('/profile') }
 
     // otherwise, render page
@@ -97,7 +118,7 @@ app.get('/login', async (req, res) => {
 // signup page
 app.get('/signup', async (req, res) => {
     // check if user has valid session cookie, redirect to profile if yes
-    const user = await findUser(req.cookies.session)
+    const user = await authUser(req.cookies.session)
     if (user) { res.redirect('/profile') }
 
     // otherwise, render page
@@ -107,7 +128,7 @@ app.get('/signup', async (req, res) => {
 // profile page
 app.get('/profile', async (req, res) => {
     // check if user has valid session cookie, redirect to profile if yes
-    const user = await findUser(req.cookies.session)
+    const user = await authUser(req.cookies.session)
     if (user) { res.render('profile', { user: user }) }
 
     // otherwise, redirect to signup
@@ -154,9 +175,33 @@ app.get('/find-choose-timer', (req, res) => {
 
 app.get('/forum/:conversation/:page', async (req, res) => {
     // check if user has valid session cookie, send forum if yes
-    const user = await findUser(req.cookies.session)
+    const user = await authUser(req.cookies.session)
     if (user) {
         res.render('forum', { friends: user.friends })
+    }
+
+    // otherwise, redirect to signup
+    else { res.redirect('/signup') }
+})
+
+// friends page
+app.get('/friends', async (req, res) => {
+    // check if user has valid session cookie, send forum if yes
+    const user = await authUser(req.cookies.session)
+    if (user) {
+        res.render('friends', { friends: user.friends })
+    }
+
+    // otherwise, redirect to signup
+    else { res.redirect('/signup') }
+})
+
+// find a buddy page
+app.get('/buddy', async (req, res) => {
+    // check if user has valid session cookie, send forum if yes
+    const user = await authUser(req.cookies.session)
+    if (user) {
+        res.render('buddy', { friends: user.friends })
     }
 
     // otherwise, redirect to signup
@@ -166,7 +211,7 @@ app.get('/forum/:conversation/:page', async (req, res) => {
 // chat page
 app.get('/chat/', async (req, res) => {
     // check if user has valid session cookie, send chat page if yes
-    const user = await findUser(req.cookies.session)
+    const user = await authUser(req.cookies.session)
     if (user) {
         res.render('chatClosed', { friends: user.friends })
     }
@@ -177,7 +222,7 @@ app.get('/chat/', async (req, res) => {
 
 app.get('/chat/:friend', async (req, res) => {
     // check if user has valid session cookie, send chat page if yes
-    const user = await findUser(req.cookies.session)
+    const user = await authUser(req.cookies.session)
     if (user) {
         res.render('chatOpen', { friends: user.friends })
     }
@@ -235,10 +280,6 @@ app.post('/signup', (req, res) => {
                     name: data.name,
                     zip: data.zip,
                     weight: data.weight,
-                    pfpURL: "../pfpimages/standardimage.png",
-                    bio: "Edit your profile to add a bio!",
-                    posts: [],
-                    friends: []
                 }
 
                 // save user data,  apologize if things go wrong
@@ -258,11 +299,58 @@ app.post('/signup', (req, res) => {
     })
 })
 
-app.post('/profileedit', (req, res) => {
-    // grab the data
-    const data = req.body
+// forum post reqs
+app.post('/newThread', async (req, res) => {
+    // check if user has valid session cookie, keep going if yes
+    const user = await authUser(req.cookies.session)
+    if (user) {
+        const data = req.body
+    }
 
-    // TODO Deal with things here Bennett
+    // send error
+    else { res.send('/signup') }
+})
+
+app.post('/newComment', async (req, res) => {
+    // check if user has valid session cookie, keep going if yes
+    const user = await authUser(req.cookies.session)
+    if (user) {
+        const data = req.body
+    }
+
+    // send error
+    else { res.send('error') }
+})
+
+// new friend post req
+app.post('/reqFriend', async (req, res) => {
+    // check if user has valid session cookie, keep going if yes
+    const user = await authUser(req.cookies.session)
+    if (user) {
+        const data = req.body
+
+        console.log(data)
+        const newFriend = await findUser(data.request)
+        console.log
+        if (newFriend) {
+            console.log(newFriend)
+        }
+    }
+
+    // send error
+    else { res.send('error') }
+})
+
+app.post('/acceptFriend', async (req, res) => {
+    // check if user has valid session cookie, keep going if yes
+    const user = await authUser(req.cookies.session)
+    if (user) {
+        const data = req.body
+
+    }
+
+    // send error
+    else { res.send('error') }
 })
 
 app.post('/find-choose-timer', (req, res) => {
