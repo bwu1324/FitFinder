@@ -363,15 +363,15 @@ app.post('/acceptFriend', async (req, res) => {
 app.post('/editprofile', async (req, res) => {
     // check if user has valid session cookie, redirect to profile if yes
     const user = await authUser(req.cookies.session)
-    if (user) { 
+    if (user) {
         const data = req.body
 
         user.bio = data.bio
         user.name = data.name
 
         fs.writeFile('./userData/' + user.username + '.json', JSON.stringify(user), (error) => {
-            if (error) { 
-                res.send('error') 
+            if (error) {
+                res.send('error')
                 return
             }
 
