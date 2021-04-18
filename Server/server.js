@@ -91,6 +91,17 @@ function findUser (username) {
     })
 }
 
+function getMatch(a, b) {
+    var matches = [];
+
+    for ( var i = 0; i < a.length; i++ ) {
+        for ( var e = 0; e < b.length; e++ ) {
+            if ( a[i] === b[e] ) matches.push( a[i] );
+        }
+    }
+    return matches;
+}
+
 function sha (input) { return crypto.createHash('sha256').update(input).digest('hex') }
 
 // setting up express
@@ -147,35 +158,22 @@ app.get('/editprofile', async (req, res) => {
     else { res.redirect('/signup') }
 })
 
+// logger
+app.get('/logger', async (req, res) => {
+    // check if user has valid session cookie, send forum if yes
+    const user = await authUser(req.cookies.session)
+    if (user) {
+        res.render('logger', { friends: user.friends })
+    }
+
+    // otherwise, redirect to signup
+    else { res.redirect('/signup') }
+})
+
 // forum page
 app.get('/forum', (req, res) => {
     res.render('forumHome')
 })
-
-
-// activity/request posting page
-app.get('/find-choose-activities', (req, res) => {
-    res.render('find-choose-activities')
-})
-
-
-// activity/request posting page
-app.get('/find-choose-city', (req, res) => {
-    res.render('find-choose-city')
-})
-
-
-// activity/request posting page
-app.get('/find-choose-location', (req, res) => {
-    res.render('find-choose-location')
-})
-
-
-// activity/request posting page
-app.get('/find-choose-timer', (req, res) => {
-    res.render('find-choose-timer')
-})
-
 
 app.get('/forum/:conversation/:page', async (req, res) => {
     // check if user has valid session cookie, send forum if yes
@@ -204,12 +202,13 @@ app.get('/friends', async (req, res) => {
 app.get('/buddy', async (req, res) => {
     // check if user has valid session cookie, send forum if yes
     const user = await authUser(req.cookies.session)
+
     if (user) {
-        res.render('buddy', { friends: user.friends })
+        res.render('buddy')
     }
 
     // otherwise, redirect to signup
-    else { res.redirect('/signup') }
+    else { res.render('/signup') }
 })
 
 // chat page
@@ -284,6 +283,7 @@ app.post('/signup', (req, res) => {
                     weight: data.weight,
                     friends: [],
                     posts: [],
+                    requests: []
                 }
 
                 // save user data,  apologize if things go wrong
@@ -335,12 +335,23 @@ app.post('/reqFriend', async (req, res) => {
     if (user) {
         const data = req.body
 
-        console.log(data)
         const newFriend = await findUser(data.request)
-        console.log
         if (newFriend) {
             console.log(newFriend)
-        }
+            var found = false
+            for (let i = 0; i < newFriend.requests.length; i++) {
+                if (newFriend.requests[i].username === user.username) {
+                    found = true
+                    res.send('sent')
+                } 
+            }
+
+            if (!found) {
+                newFriend.requests.push(user)
+                    fs.writeFile('./userData/' + newFriend.username + '.json', JSON.stringify(newFriend), () => {})
+                    res.send('sent')
+            }
+        } else { res.send('notfound') }
     }
 
     // send error
@@ -376,6 +387,77 @@ app.post('/editprofile', async (req, res) => {
             }
 
             res.send('success')
+        })
+    }
+
+    // otherwise, redirect to signup
+    else { res.send('error') }
+})
+
+// find buddy post req
+app.post('/buddy', async (req, res) => {
+    const user = await authUser(req.cookies.session)
+    if (user) {
+        var data = req.body
+        data.username = user.username
+        data.zip = user.zip
+        user.posts.push(data)
+
+        fs.writeFile('./userData/' + user.username + '.json', JSON.stringify(user), (error) => {
+            if (error) {
+                res.send('error')
+                return
+            }
+
+            res.send('success')
+        })
+    }
+
+    // otherwise, redirect to signup
+    else { res.send('error') }
+})
+
+// find findbuddy post req
+app.post('/findbuddy', async (req, res) => {
+    const user = await authUser(req.cookies.session)
+    if (user) {
+        var data = req.body
+        data.zip = user.zip
+        user.posts.push(data)
+
+        fs.readdir('./userData/', async (err, files) => {
+            var users = []
+            for (let i = 0; i < files.length; i++) {
+                users.push(findUser(files[i].split('.')[0]))
+            }
+
+            var matchLocation = []
+            for (let i = 0; i < users.length; i++) {
+                var thisUser = await users[i]
+                if (thisUser.username !== user.username) {
+                    for (let j = 0; j < thisUser.posts.length; j++) {
+                        if (thisUser.posts[j].zip === data.zip) {
+                            matchLocation.push(thisUser.posts[j])
+                        }
+                    }
+                }
+            }
+            
+            var matchInterest = []
+            for (let i = 0; i < matchLocation.length; i++) {
+                if (getMatch(matchLocation[i].activities, data.activities).length > 0) {
+                    matchInterest.push(matchLocation[i])
+                }
+            }
+
+            var match = []
+            for (let i = 0; i < matchInterest.length; i++) {
+                if ((matchInterest[i].start - data.start)**2**0.5 < (matchInterest[i].end - matchInterest[i].start)) {
+                    match.push(matchInterest[i])
+                }
+            }
+            
+            res.send(JSON.stringify({ date: match }))
         })
     }
 
