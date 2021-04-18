@@ -53,7 +53,6 @@ wsserver.on('connection', (socket) => {
         try {
             // parse the data
             const data = JSON.parse(message.data)
-            console.log(data)
             if (data.type === 'auth') {
                 // find user and close socket if not found
                 const user = await findUser(data.cookie)
