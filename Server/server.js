@@ -110,7 +110,9 @@ const app = express()
 app.set('view engine', 'ejs')
 app.use(express.static('./assets'))
 app.use(cookieParser())
-app.use(bodyParser.json())
+
+app.use(bodyParser.json({extended: true, limit: '100mb'}));
+app.use(bodyParser.urlencoded({extended: true, limit: '100mb'}));
 
 
 // homepage
@@ -176,8 +178,40 @@ app.get('/activitylogger', (req, res) => {
 
 // forum page
 app.get('/forum', (req, res) => {
-    res.render('forumHome')
+    res.render('forum')
 })
+
+// forum page
+app.get('/makethread', (req, res) => {
+    res.render('makethread')
+})
+
+// forum post reqs
+app.post('/makethread', async (req, res) => {
+    // check if user has valid session cookie, keep going if yes
+    const user = await authUser(req.cookies.session)
+    if (user) {
+        try {
+            const data = req.body;
+            const newThread = {
+                title: data.title,
+                replies: [],
+                replyvotes: [],
+                replytimes: [],
+                creationTime: Date.now(),
+            }
+
+            fs.writeFile('./assets/global/threads/' + title + Date.now() + '.json', JSON.stringify(newThread),() => {});
+            res.send('forum')
+
+        } catch {
+            res.send('error')
+        }
+    }
+    // send error
+    else { res.send(user) }
+})
+
 
 app.get('/forum/:conversation/:page', async (req, res) => {
     // check if user has valid session cookie, send forum if yes
@@ -241,9 +275,9 @@ app.get('/findbuddy', async (req, res) => {
             for (let i = 0; i < users.length; i++) {
                 var thisUser = await users[i]
                 if (thisUser.username !== user.username) {
-                    for (let j = 0; j < thisUser.posts.length; j++) {
-                        if (thisUser.posts[j].zip === user.zip) {
-                            match.push(thisUser.posts[j])
+                    for (let j = 0; j < thisUser.buddyposts.length; j++) {
+                        if (thisUser.buddyposts[j].zip === user.zip) {
+                            match.push(thisUser.buddyposts[j])
                         }
                     }
                 }
@@ -330,6 +364,7 @@ app.post('/signup', (req, res) => {
                     bio: "Edit your profile to set your bio",
                     friends: [],
                     posts: [],
+                    buddyposts: [],
                     requests: [],
                     log: []
                 }
@@ -496,7 +531,7 @@ app.post('/buddy', async (req, res) => {
         var data = req.body
         data.username = user.username
         data.zip = user.zip
-        user.posts.push(data)
+        user.buddyposts.push(data)
 
         fs.writeFile('./userData/' + user.username + '.json', JSON.stringify(user), (error) => {
             if (error) {
@@ -567,10 +602,10 @@ app.post('/activitylogger', async (req, res) => {
         try {
             const data = req.body
 
-            const fileName = sha(user.username + Date.now()) + '.png'
+            const fileName = user.username + Date.now() + '.png'
 
             var base64Data = req.body.image.replace(/^data:image\/png;base64,/, "");
-            fs.writeFile('./assets/global/logs/' + fileName, base64Data, 'base64', () => { })
+            fs.writeFile('./assets/global/logs/' + fileName, base64Data, 'base64', () => {})
 
             var splitDate = data.date.split('-')
             const newLog = {
