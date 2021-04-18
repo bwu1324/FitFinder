@@ -208,7 +208,38 @@ app.get('/buddy', async (req, res) => {
     }
 
     // otherwise, redirect to signup
-    else { res.render('/signup') }
+    else { res.redirect('/signup') }
+})
+
+app.get('/findbuddy', async (req, res) => {
+    // check if user has valid session cookie, send forum if yes
+    const user = await authUser(req.cookies.session)
+
+    if (user) {
+        fs.readdir('./userData/', async (err, files) => {
+            var users = []
+            for (let i = 0; i < files.length; i++) {
+                users.push(findUser(files[i].split('.')[0]))
+            }
+
+            var match = []
+            for (let i = 0; i < users.length; i++) {
+                var thisUser = await users[i]
+                if (thisUser.username !== user.username) {
+                    for (let j = 0; j < thisUser.posts.length; j++) {
+                        if (thisUser.posts[j].zip === user.zip) {
+                            match.push(thisUser.posts[j])
+                        }
+                    }
+                }
+            }
+
+            res.render('findbuddy', { match: match })
+        })
+    }
+
+    // otherwise, redirect to signup
+    else { res.render('signup') }
 })
 
 // chat page
@@ -315,7 +346,7 @@ app.post('/newThread', async (req, res) => {
     }
 
     // send error
-    else { res.send('/signup') }
+    else { res.send('signup') }
 })
 
 app.post('/newComment', async (req, res) => {
@@ -338,17 +369,16 @@ app.post('/reqFriend', async (req, res) => {
 
         const newFriend = await findUser(data.request)
         if (newFriend) {
-            console.log(newFriend)
             var found = false
             for (let i = 0; i < newFriend.requests.length; i++) {
-                if (newFriend.requests[i].username === user.username) {
+                if (newFriend.requests[i] === user.username) {
                     found = true
                     res.send('sent')
                 }
             }
 
             if (!found) {
-                newFriend.requests.push(user)
+                newFriend.requests.push(user.username)
                     fs.writeFile('./userData/' + newFriend.username + '.json', JSON.stringify(newFriend), () => {})
                     res.send('sent')
             }
@@ -365,6 +395,8 @@ app.post('/acceptFriend', async (req, res) => {
     if (user) {
         const data = req.body
 
+        for (let i = 0; i < user.requests; i++) {
+        }
     }
 
     // send error
