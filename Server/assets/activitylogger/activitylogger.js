@@ -13,10 +13,6 @@ function previewFile() {
 
 }
 
-function buf2hex(buffer) { // buffer is an ArrayBuffer
-    return Array.prototype.map.call(new Uint8Array(buffer), x => ('00' + x.toString(16)).slice(-2)).join('');
-  }
-
 
 function logActivity() {
     const reader = new FileReader();
@@ -24,7 +20,6 @@ function logActivity() {
 
     reader.addEventListener("load", function () {
         const image = reader.result
-        console.log(image)
 
         const data = {                                                  // grab data
             activityName: document.getElementById('name').value,

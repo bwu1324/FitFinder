@@ -469,8 +469,13 @@ app.post('/editprofile', async (req, res) => {
     if (user) {
         const data = req.body
 
-        user.bio = data.bio
-        user.name = data.name
+        if (data.bio) { user.bio = data.bio }
+        if (data.name) { user.name = data.name }
+        if (data.image) {
+            const fileName = user.username + '.png'
+            var base64Data = req.body.image.replace(/^data:image\/png;base64,/, "");
+            fs.writeFile('./assets/global/profile/' + fileName, base64Data, 'base64', () => { })
+        }
 
         fs.writeFile('./userData/' + user.username + '.json', JSON.stringify(user), (error) => {
             if (error) {
