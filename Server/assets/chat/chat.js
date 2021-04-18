@@ -125,7 +125,7 @@ socket.onmessage = function (message) {
 
 function send() {
     const text = document.getElementById('message').value
-
+    document.getElementById('message').value = ''
     const message = {
         type: 'message',
         chat: chat,

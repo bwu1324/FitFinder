@@ -412,15 +412,14 @@ app.post('/reqFriend', async (req, res) => {
     else { res.send('error') }
 })
 
+// accept friend post req
 app.post('/acceptFriend', async (req, res) => {
     // check if user has valid session cookie, keep going if yes
     const user = await authUser(req.cookies.session)
-    console.log(user)
     if (user) {
         const data = req.body
 
         const newFriend = await findUser(data.request)
-        console.log(newFriend)
         if (newFriend) {
             for (let i = 0; i < user.requests.length; i++) {
                 if (user.requests[i] === data.request) {
@@ -447,7 +446,6 @@ app.post('/acceptFriend', async (req, res) => {
 
             // create directory for conversation
             fs.mkdir('./conversations/' + chatID, () => {
-                console.log('hi')
                 const newFile0 = { type: 'end' }
                 fs.writeFile('./conversations/' + chatID + '/0.json', JSON.stringify(newFile0), () => { })
 
