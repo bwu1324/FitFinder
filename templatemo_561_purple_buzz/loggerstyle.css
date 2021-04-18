@@ -1,6 +1,6 @@
 .welcome
 {
-    padding: 100px 150px;
+    padding: 500px 150px;
     margin-top: 20px;
     background-color: #fff;
     box-shadow: 0 0 20px 7px rgba(0,0,0,0.2);
@@ -10,10 +10,10 @@
 }
 .welcome .home-btn
 {
-    margin-top: 10px;
-        padding: 10px 30px;
+    margin-top: 1000px;
+        padding: 40px 30px;
         border-radius: 30px;
-        color: #fff;
+        color:#FFF;
         background-color: #013f7e;
 }
 .welcome .btn:focus{
@@ -30,4 +30,8 @@
 }
 #about h3{
     margin: 20px auto;
+}
+.chart
+{
+    justify-content: center;
 }
