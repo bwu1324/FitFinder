@@ -1,4 +1,17 @@
+function previewFile() {
+    const preview = document.getElementById('previewimg');
+    const file = document.getElementById('image').files[0];
+    const reader = new FileReader();
 
+    reader.addEventListener("load", function () {
+        preview.src = reader.result;
+    }, false);
+
+    if (file) {
+        reader.readAsDataURL(file);
+    }
+
+}
 function editProfile() {
     const data = {                                                  // grab data
         name: document.getElementById('name').value,

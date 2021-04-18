@@ -112,6 +112,20 @@
                     </div>
                 </center>
             </div>
+            <div class="form-floating">
+                <div style="width: 35%">
+                    <label for="img">Upload Activity Image:</label>
+                    <input type="file" class="form-control light-300" id="image" name="image" accept="image/*"
+                           placeholder="Activity Description/Notes" style="width: 69%" onchange="previewFile()">
+                </div>
+                <center>
+                    <div style="width: 35%">
+                        <p id="imgTooltip" style="position: relative; text-align: left; color: red; visibility: hidden">
+                            Please upload an image of your activity!</p>
+                    </div>
+                </center>
+            </div>
+            <img src="" id='previewimg' height="200" alt="Image preview..."><br><br>
             <p></p>
             <button class="btn btn-primary rounded-pill btn-block shadow px-4 py-2" type="submit"
                 onclick="editProfile()">Save Changes</button>

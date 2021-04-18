@@ -152,6 +152,14 @@ app.get('/forum', (req, res) => {
     res.render('forumHome')
 })
 
+// forum page
+app.get('/activitylogger', (req, res) => {
+    res.render('activitylogger')
+})
+
+app.get('/logger', (req, res) => {
+    res.render('logger')
+})
 
 // activity/request posting page
 app.get('/find-choose-activities', (req, res) => {
@@ -282,6 +290,7 @@ app.post('/signup', (req, res) => {
                     name: data.name,
                     zip: data.zip,
                     weight: data.weight,
+                    bio: "Edit your profile to set your bio",
                     friends: [],
                     posts: [],
                 }
@@ -382,6 +391,8 @@ app.post('/editprofile', async (req, res) => {
     // otherwise, redirect to signup
     else { res.send('error') }
 })
+
+// TODO Bennett to add activitylogger POST request handling
 
 app.listen(8080)    // start the server
 
