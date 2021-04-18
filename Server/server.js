@@ -135,9 +135,42 @@ app.get('/profile', async (req, res) => {
     else { res.redirect('/signup') }
 })
 
+app.get('/profileedit', async (req, res) => {
+    // check if user has valid session cookie, redirect to profile if yes
+    const user = await findUser(req.cookies.session)
+    if (user) { res.render('profileedit', { user: user }) }
+
+    // otherwise, redirect to signup
+    else { res.redirect('/signup') }
+})
+
 // forum page
 app.get('/forum', (req, res) => {
     res.render('forumHome')
+})
+
+
+// activity/request posting page
+app.get('/find-choose-activities', (req, res) => {
+    res.render('find-choose-activities')
+})
+
+
+// activity/request posting page
+app.get('/find-choose-city', (req, res) => {
+    res.render('find-choose-city')
+})
+
+
+// activity/request posting page
+app.get('/find-choose-location', (req, res) => {
+    res.render('find-choose-location')
+})
+
+
+// activity/request posting page
+app.get('/find-choose-timer', (req, res) => {
+    res.render('find-choose-timer')
 })
 
 app.get('/forum/:conversation/:page', async (req, res) => {
@@ -197,6 +230,7 @@ app.get('/chat/:friend', async (req, res) => {
     // otherwise, redirect to signup
     else { res.redirect('/signup') }
 })
+
 
 
 // login form post req
@@ -294,7 +328,7 @@ app.post('/reqFriend', async (req, res) => {
     const user = await authUser(req.cookies.session)
     if (user) {
         const data = req.body
-        
+
         console.log(data)
         const newFriend = await findUser(data.request)
         console.log

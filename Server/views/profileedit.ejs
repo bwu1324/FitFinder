@@ -5,6 +5,7 @@
     <title>FitFinder</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="./profileedit.js"></script>
     <link rel="apple-touch-icon" href="assets/img/fitfinder/favicon.png">
     <link rel="shortcut icon" type="image/x-icon" href="assets/img/fitfinder/favicon.png">
     <!-- Load Require CSS -->
@@ -61,45 +62,26 @@
 </nav>
 <!-- Close Header -->
 
-<div class="container">
-    <div class="row" style="height: 50px">
-        <p></p><p></p><p></p>
-        <div class="col-2"></div>
-        <div class="col-3">
-            <img style="border-radius: 50%; text-align: right; width: 200px; height: 200px" src="<%-user.pfpURL%>">
-        </div>
-        <div class="col-4">
-            <h2><%- user.name%></h2>
-        </div>
-        <div class="col-3">
-            <a href="/profileedit">
-                <button class="btn btn-primary rounded-pill btn-block shadow px-4 py-2" style="">Edit Profile</button>
-            </a>
-        </div>
+<center>
+<form onsubmit="return false">
+    <h2 class="h2 text-center col-12 py-5 semi-bold-600">Edit Profile</h2>
+    <div class="form-floating">
+        <input type="text" class="form-control light-300" id="name" name="name" placeholder="Full Name">
     </div>
-    <div class="row" style="height: 100px;">
-        <p></p><p></p><p></p>
-        <div class="col-5"></div>
-        <div class="col-7">
-            <h4>@<%-user.username%></h4>
-        </div>
+    <p></p>
+    <div class="form-floating">
+        <input type="text" class="form-control light-300" id="bio" name="bio" placeholder="Bio (max 280 characters)">
+        <center>
+            <div style="width: 35%">
+                <p id="bioTooltip" style="position: relative; text-align: left; color: red; visibility: hidden">Bio is too long! Must be under 280 characters, but is 300 characters long!</p>
+            </div>
+        </center>
     </div>
-    <div class="row">
-        <p></p><p></p><p></p>
-        <div class="col-5"></div>
-        <div class="col-7">
-            <h4><strong><%-user.posts.length%></strong> Posts &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong><%-user.friends.length%></strong> Friends</h4>
-        </div>
-    </div>
-    <div class="row">
-        <p></p><p></p><p></p>
-        <div class="col-5"></div>
-        <div class="col-3" style="overflow-wrap: break-word;">
-            <h6><%-user.bio%></h6>
-        </div>
-    </div>
-</div>
-
+    <p></p>
+    <button class="btn btn-primary rounded-pill btn-block shadow px-4 py-2" type="submit" onclick="profileEdit()">Save Changes</button>
+    <p></p>
+</form>
+</center>
 
 
 <!-- Bootstrap -->
