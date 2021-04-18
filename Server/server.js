@@ -178,6 +178,10 @@ app.get('/find-choose-location', (req, res) => {
     res.render('find-choose-location')
 })
 
+// activity/request posting page
+app.get('/makepost', (req, res) => {
+    res.render('makepost')
+})
 
 // activity/request posting page
 app.get('/find-choose-timer', (req, res) => {

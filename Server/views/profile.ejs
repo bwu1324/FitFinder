@@ -56,13 +56,13 @@
                 <span class="text-dark h4">Fit</span><span class="h4 finder">Finder</span>
             </a>
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbar-toggler-success" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
+                    data-bs-target="#navbar-toggler-success" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="align-self-center collapse navbar-collapse flex-fill  d-lg-flex justify-content-lg-between"
-                id="navbar-toggler-success">
+                 id="navbar-toggler-success">
                 <div class="mx-xl-9 mb-2">
                     <ul class="nav navbar-nav d-flex justify-content-between mx-xl-5 text-center text-dark">
                         <li class="nav-item" style="padding: 10px; ">
@@ -83,6 +83,9 @@
                         </li>
                         <li class="nav-item" style="padding: 10px">
                             <a class="nav-link btn-outline-primary rounded-pill px-3" href="/buddy">Find a Buddy</a>
+                        </li>
+                        <li class="nav-item" style="padding: 10px">
+                            <a class="nav-link btn-outline-primary rounded-pill px-3" href="/makepost">Make a Post</a>
                         </li>
                         <li class="nav-item" style="padding: 10px">
                             <a class="nav-link btn-outline-primary rounded-pill px-3" onclick="logout()">Logout</a>
@@ -111,7 +114,7 @@
             </div>
             <div class="col-3">
                 <a href="/editprofile">
-                    <button class="btn btn-primary rounded-pill btn-block shadow px-4 py-2">Edit Profile</button>
+                    <button class="btn btn-primary rounded-pill btn-block shadow px-4 py-2" style="width: 130px">Edit Profile</button>
                 </a>
             </div>
         </div>
@@ -120,9 +123,14 @@
             <p></p>
             <p></p>
             <div class="col-5"></div>
-            <div class="col-7">
+            <div class="col-4">
                 <h4>@<%-user.username%>
                 </h4>
+            </div>
+            <div class="col-3">
+                <a href="/makepost">
+                    <button class="btn btn-primary rounded-pill btn-block shadow px-4 py-2" style="width: 130px">New Post</button>
+                </a>
             </div>
         </div>
         <div class="row">
