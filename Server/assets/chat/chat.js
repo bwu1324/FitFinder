@@ -1,8 +1,8 @@
 const socket = new WebSocket('ws://localhost:8000');
-const url = window.location.href.split('/')
-const chat = url[url.length - 1]
-var wait
-var page = 0
+const url = window.location.href.split('/');
+const chat = url[url.length - 1];
+var wait;
+var page = 0;
 
 function readCookie(name) {
     var nameEQ = name + "=";
@@ -26,8 +26,9 @@ socket.onopen = function () {
     socket.send(JSON.stringify(auth))
 
     var historyContainer = document.getElementById("history-container")
+
     historyContainer.addEventListener("scroll", function (event) {
-        if (historyContainer.scrollTop === 0 && !wait) {
+        if (historyContainer.scrollTop < 10 && !wait) {
             wait = true
             if (page > 0) {
                 socket.send(JSON.stringify({ type: 'more', number: page - 1 }))

@@ -11,7 +11,7 @@ const defaultpp = fs.readFileSync('./assets/global/default.png')
 const secret = '0439868ec28dab59' //crypto.randomBytes(16)          // generate random server secret key for encrypting cookies
 
 // takes in session cookie, returns stringified json data
-function decryptCookie (data) {
+function decryptCookie(data) {
     try {
         data = JSON.parse(Buffer.from(data, 'base64').toString('ascii'))
         const iv = Buffer.from(data.iv)
@@ -26,7 +26,7 @@ function decryptCookie (data) {
 }
 
 // takes in stringified user data, returns session cookie
-function encryptCookie (data) {
+function encryptCookie(data) {
     try {
         const iv = crypto.randomBytes(16)
         const cipher = crypto.createCipheriv('aes-128-cbc', secret, iv)
@@ -40,7 +40,7 @@ function encryptCookie (data) {
 }
 
 // takes in username, returns session cookie
-function createCookie (user) {
+function createCookie(user) {
     const data = JSON.parse(fs.readFileSync('./userData/' + user + '.json'))
     const userData = {
         username: data.username,
@@ -50,7 +50,7 @@ function createCookie (user) {
 }
 
 // takes in session cookie, return promise. resolves to user object if found, undefined it not
-function authUser (session) {
+function authUser(session) {
     return new Promise((resolve) => {
         try {
             const user = JSON.parse(decryptCookie(session))
@@ -71,7 +71,7 @@ function authUser (session) {
     })
 }
 
-function findUser (username) {
+function findUser(username) {
     return new Promise((resolve) => {
         try {
             fs.access('./userData/' + username + '.json', (err) => {
@@ -94,15 +94,15 @@ function findUser (username) {
 function getMatch(a, b) {
     var matches = [];
 
-    for ( var i = 0; i < a.length; i++ ) {
-        for ( var e = 0; e < b.length; e++ ) {
-            if ( a[i] === b[e] ) matches.push( a[i] );
+    for (var i = 0; i < a.length; i++) {
+        for (var e = 0; e < b.length; e++) {
+            if (a[i] === b[e]) matches.push(a[i]);
         }
     }
     return matches;
 }
 
-function sha (input) { return crypto.createHash('sha256').update(input).digest('hex') }
+function sha(input) { return crypto.createHash('sha256').update(input).digest('hex') }
 
 // setting up express
 const app = express()
@@ -163,7 +163,7 @@ app.get('/logger', async (req, res) => {
     // check if user has valid session cookie, send forum if yes
     const user = await authUser(req.cookies.session)
     if (user) {
-        res.render('logger', { friends: user.friends })
+        res.render('logger', { log: user.log })
     }
 
     // otherwise, redirect to signup
@@ -206,7 +206,6 @@ app.get('/friends', async (req, res) => {
             var request = await findUser(user.friends[i])
             friends.push(request)
         }
-        console.log(friends)
         res.render('friends', { friendRequests: friendRequests, friends: friends })
     }
 
@@ -331,7 +330,8 @@ app.post('/signup', (req, res) => {
                     bio: "Edit your profile to set your bio",
                     friends: [],
                     posts: [],
-                    requests: []
+                    requests: [],
+                    log: []
                 }
 
                 // save user data,  apologize if things go wrong
@@ -341,7 +341,7 @@ app.post('/signup', (req, res) => {
                         return
                     }
 
-                    fs.writeFile('./assets/global/profile/' + data.username + '.png', defaultpp, () => {} )
+                    fs.writeFile('./assets/global/profile/' + data.username + '.png', defaultpp, () => { })
 
                     // otherwise, send session cookie
                     res.send(createCookie(data.username))
@@ -393,11 +393,18 @@ app.post('/reqFriend', async (req, res) => {
                 }
             }
 
-            if (!found) {
-                newFriend.requests.push(user.username)
-                    fs.writeFile('./userData/' + newFriend.username + '.json', JSON.stringify(newFriend), () => {})
+            for (let i = 0; i < newFriend.friends.length; i++) {
+                if (newFriend.friends[i] === user.username) {
+                    found = true
                     res.send('sent')
+                }
             }
+
+            if (!found && user.username !== data.request) {
+                newFriend.requests.push(user.username)
+                fs.writeFile('./userData/' + newFriend.username + '.json', JSON.stringify(newFriend), () => { })
+                res.send('sent')
+            } else { res.send('sent') }
         } else { res.send('notfound') }
     }
 
@@ -408,11 +415,47 @@ app.post('/reqFriend', async (req, res) => {
 app.post('/acceptFriend', async (req, res) => {
     // check if user has valid session cookie, keep going if yes
     const user = await authUser(req.cookies.session)
+    console.log(user)
     if (user) {
         const data = req.body
 
-        for (let i = 0; i < user.requests; i++) {
-        }
+        const newFriend = await findUser(data.request)
+        console.log(newFriend)
+        if (newFriend) {
+            for (let i = 0; i < user.requests.length; i++) {
+                if (user.requests[i] === data.request) {
+                    user.requests.splice(i)
+                }
+            }
+
+            for (let i = 0; i < newFriend.requests.length; i++) {
+                if (newFriend.requests[i] === user.username) {
+                    newFriend.requests.splice(i)
+                }
+            }
+            user.friends.push(data.request)
+            newFriend.friends.push(user.username)
+
+            fs.writeFile('./userData/' + user.username + '.json', JSON.stringify(user), () => { })
+            fs.writeFile('./userData/' + newFriend.username + '.json', JSON.stringify(newFriend), () => { })
+
+            // calculate name of conversation
+            var chatID
+            if (data.request > user.username) { chatID = data.request + user.username }
+            else { chatID = user.username + data.request }
+            chatID = sha(chatID)
+
+            // create directory for conversation
+            fs.mkdir('./conversations/' + chatID, () => {
+                console.log('hi')
+                const newFile0 = { type: 'end' }
+                fs.writeFile('./conversations/' + chatID + '/0.json', JSON.stringify(newFile0), () => { })
+
+                const newFile1 = { type: 'messages', users: [user.username, data.request], number: 1, messages: [] }
+                fs.writeFile('./conversations/' + chatID + '/1.json', JSON.stringify(newFile1), () => { })
+            })
+            res.send('success')
+        } else { res.send('error') }
     }
 
     // send error
@@ -501,7 +544,7 @@ app.post('/findbuddy', async (req, res) => {
 
             var match = []
             for (let i = 0; i < matchInterest.length; i++) {
-                if ((matchInterest[i].start - data.start)**2**0.5 < (matchInterest[i].end - matchInterest[i].start)) {
+                if ((matchInterest[i].start - data.start) ** 2 ** 0.5 < (matchInterest[i].end - matchInterest[i].start)) {
                     match.push(matchInterest[i])
                 }
             }
@@ -514,7 +557,52 @@ app.post('/findbuddy', async (req, res) => {
     else { res.send('error') }
 })
 
+// activity logger post req
+app.post('/activitylogger', async (req, res) => {
+    const user = await authUser(req.cookies.session)
+    if (user) {
+        try {
+            const data = req.body
+
+            const fileName = sha(user.username + Date.now()) + '.png'
+
+            var base64Data = req.body.image.replace(/^data:image\/png;base64,/, "");
+            fs.writeFile('./assets/global/logs/' + fileName, base64Data, 'base64', () => { })
+
+            var splitDate = data.date.split('-')
+            const newLog = {
+                activityName: data.activityName,
+                mins: parseInt(data.mins),
+                date: splitDate[1] + '/' + splitDate[2] + '/' + splitDate[0],
+                description: data.description,
+                image: '../global/logs/' + fileName
+            }
+
+            user.log.push(newLog)
+            fs.writeFile('./userData/' + user.username + '.json', JSON.stringify(user), () => { })
+            res.send('logged')
+        } catch { res.send('error') }
+    }
+
+    // otherwise, redirect to signup
+    else { res.send('error') }
+})
+
+// logger data post req
+app.post('/loggerdata', async (req, res) => {
+    const user = await authUser(req.cookies.session)
+    if (user) {
+        res.send(JSON.stringify({ data: user.log }))
+    }
+
+    // otherwise, redirect to signup
+    else { res.send('error') }
+})
+
+
+
 app.listen(8080)    // start the server
 
 const websocket = fork('./websocket.js')
 websocket.send(secret)
+

@@ -13,65 +13,90 @@ function previewFile() {
 
 }
 
+function buf2hex(buffer) { // buffer is an ArrayBuffer
+    return Array.prototype.map.call(new Uint8Array(buffer), x => ('00' + x.toString(16)).slice(-2)).join('');
+  }
+
 
 function logActivity() {
-    const data = {                                                  // grab data
-        activityName: document.getElementById('name').value,
-        mins: document.getElementById('mins').value,
-        date: document.getElementById('date').value,
-        desc: document.getElementById('desc').value,
+    const reader = new FileReader();
+    const file = document.getElementById('image').files[0];
+
+    reader.addEventListener("load", function () {
+        const image = reader.result
+        console.log(image)
+
+        const data = {                                                  // grab data
+            activityName: document.getElementById('name').value,
+            mins: document.getElementById('mins').value,
+            date: document.getElementById('date').value,
+            description: document.getElementById('desc').value,
+            image: image
+        }
+    
+        let error = false;
+    
+        if (document.getElementById('image').value === "") {
+            document.getElementById('imgTooltip').style.visibility = "visible";
+            error = true;
+        }
+        else {
+            document.getElementById('imgTooltip').style.visibility = "hidden";
+        }
+    
+        if (data.activityName === "") {
+            document.getElementById('nameTooltip').style.visibility = "visible";
+            error = true;
+        }
+        else {
+            document.getElementById('nameTooltip').style.visibility = "hidden";
+        }
+    
+        if (data.mins === "") {
+            document.getElementById('timeTooltip').style.visibility = "visible";
+            error = true;
+        }
+        else {
+            document.getElementById('timeTooltip').style.visibility = "hidden";
+        }
+    
+        if (data.date === "") {
+            document.getElementById('dateTooltip').style.visibility = "visible";
+            error = true;
+        }
+        else {
+            document.getElementById('dateTooltip').style.visibility = "hidden";
+        }
+    
+    
+    
+        console.log(data)
+    
+        if (error) {
+            return
+        }
+    
+    
+    
+        var xhr = new XMLHttpRequest();                                 // create http request and send it
+        xhr.open("POST", "/activitylogger", true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify(data));
+    
+        xhr.onreadystatechange = function () {                          // wait for response
+            if (xhr.readyState == 4) {
+                const response = xhr.responseText
+                if (response === 'error') {                            // alert when there is an issue or username exists
+                    alert('There was an error with the friend request, we apologize for the inconvinience')
+                    window.location.replace('/activitylogger')
+                } else {
+                    window.location.replace('/logger')
+                }
+            }
+        };
+    }, false);
+
+    if (file) {
+        reader.readAsDataURL(file);
     }
-
-    let error = false;
-
-    if (document.getElementById('image').value === "") {
-        document.getElementById('imgTooltip').style.visibility = "visible";
-        error = true;
-    }
-    else {
-        document.getElementById('imgTooltip').style.visibility = "hidden";
-    }
-
-    if (data.activityName === "") {
-        document.getElementById('nameTooltip').style.visibility = "visible";
-        error = true;
-    }
-    else {
-        document.getElementById('nameTooltip').style.visibility = "hidden";
-    }
-
-    if (data.mins === "") {
-        document.getElementById('timeTooltip').style.visibility = "visible";
-        error = true;
-    }
-    else {
-        document.getElementById('timeTooltip').style.visibility = "hidden";
-    }
-
-    if (data.date === "") {
-        document.getElementById('dateTooltip').style.visibility = "visible";
-        error = true;
-    }
-    else {
-        document.getElementById('dateTooltip').style.visibility = "hidden";
-    }
-
-
-
-    console.log(data)
-
-    if (error) {
-        return
-    }
-
-
-
-    var xhr = new XMLHttpRequest();                                 // create http request and send it
-    xhr.open("POST", "./", true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.send(JSON.stringify(data));
-
-    xhr.onreadystatechange = function () {                          // wait for response
-        // TODO Bennett add stuff here
-    };
 }

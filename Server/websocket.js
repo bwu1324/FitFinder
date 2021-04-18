@@ -53,7 +53,7 @@ wsserver.on('connection', (socket) => {
         try {
             // parse the data
             const data = JSON.parse(message.data)
-
+            console.log(data)
             if (data.type === 'auth') {
                 // find user and close socket if not found
                 const user = await findUser(data.cookie)
@@ -64,7 +64,7 @@ wsserver.on('connection', (socket) => {
 
                 // set data for this socket and add them to logged in users
                 username = user.username
-                loggedIn.push({ username: username, socket: socket })
+                loggedIn.push({ username: username, socket: socket, chat: data.chat })
                 
                 // calculate name of conversation
                 if (data.chat > username) { chatID = data.chat + username }
@@ -161,11 +161,11 @@ wsserver.on('connection', (socket) => {
                             // if the other person in the conversation is logged in, send data there as well
                             var i = 0
                             while (i < loggedIn.length) {
-                                if (loggedIn[i].username === data.chat) {
+                                if (loggedIn[i].username === data.chat && loggedIn[i].chat === username) {
                                     loggedIn[i].socket.send(JSON.stringify(notification))
                                     i = loggedIn.length
                                 }
-                                i++
+                                i++ 
                             }
 
                             // send that data to the user ofc
