@@ -39,7 +39,7 @@ function acceptRequest (username) {
         if (xhr.readyState == 4) {
             const response = xhr.responseText
             if (response === 'error') {                            // alert when there is an issue or username exists
-                alert('There was an error with the friend request, we apologize for the inconvinience')
+                alert('There was an error with the friend request, we apologize for the inconvenience')
                 window.location.replace('/friends')
             } else if (response === 'notfound') {
                 alert('Friend does not exist')
