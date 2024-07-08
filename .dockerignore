@@ -1,3 +1,4 @@
 data/conversations/*
 data/userData/*
 assets/global/imgs/*
+.env
