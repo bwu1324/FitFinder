@@ -1,20 +1,12 @@
 function postBuddyRequest () {
     try {
         const endDate = document.getElementById('endDate').value        // convert to unix dates
-        var endUnix = new Date(endDate.split('T')[0]).getTime()
-    
-        var endTime = endDate.split('T')[1]
-        endTime = endTime.split(':')
-        endUnix += endTime[0] * 3600
-        endUnix += endTime[1] * 60
+        var endUnix = new Date(endDate).getTime()
+
     
         const startDate = document.getElementById('startDate').value
-        var startUnix = new Date(startDate.split('T')[0]).getTime()
-    
-        var startTime = startDate.split('T')[1]
-        startTime = startTime.split(':')
-        startUnix += startTime[0] * 3600
-        startUnix += startTime[1] * 60
+        var startUnix = new Date(startDate).getTime()
+
     
         var data = {                                                  // data
             activities: [],
@@ -22,8 +14,6 @@ function postBuddyRequest () {
             start: startUnix,
             end: endUnix
         }
-
-        console.log(data)
     
         const activities = ['tennis', 'basketball', 'hiking', 'volleyball', 'swimming', 'badminton']
     

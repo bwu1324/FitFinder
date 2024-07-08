@@ -102,8 +102,7 @@
 
                         <div class="p-2">
                             <div class="card" style="width: 18rem; border-radius: 0.75rem">
-                                <img class="card-img-top" src="../global/profile/<%-match[i].username%>.png"
-                                    alt="Card image cap">
+                                <img class="card-img-top" src="<%-match[i].profile_image%>" alt="Card image cap">
                                 <div class="card-body">
                                     <h5 class="card-title">
                                         <%-match[i].username%>
@@ -118,19 +117,9 @@
                                                         <% }; %>
                                     </p>
                                     <p class="card-text">Prefered Time:<br>
-                                        <% var start=new Date(match[i].start * 1000) %>
-                                            <% var end=new Date(match[i].end * 1000) %>
-                                                From: <%-start.getMonth()%>/<%-start.getDate()%>
-                                                        <%-start.getHours() % 12%>:<%-start.getMinutes()%>
-                                                                <% if (start.getHours() / 12 < 1) { %>AM<%} else { %>PM
-                                                                        <%}%>
-                                                                            <br>
-                                                                            To: <%-end.getMonth()%>/<%-end.getDate()%>
-                                                                                    <%-end.getHours() % 12%>:
-                                                                                        <%-end.getMinutes()%>
-                                                                                            <% if (end.getHours() / 12 <
-                                                                                                1) { %>AM<%} else { %>PM
-                                                                                                    <%}%>
+                                        From: <%- (new Date(match[i].start)).toLocaleString() %>
+                                        <br>
+                                        To: <%- (new Date(match[i].end)).toLocaleString() %>
                                     </p>
                                     <button class="btn btn-primary" onclick="sendFriendRequest(this.value)"
                                         value="<%-match[i].username%>">Send Friend Request</button>

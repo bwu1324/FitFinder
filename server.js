@@ -5,18 +5,19 @@ const crypto = require('crypto')
 const argon2 = require('argon2')
 const fs = require('fs')
 const { fork } = require('child_process');
+const dotenv = require('dotenv');
+dotenv.config()
 
-const defaultpp = fs.readFileSync('./assets/global/default.png')
-
-const secret = '0439868ec28dab59' //crypto.randomBytes(16)          // generate random server secret key for encrypting cookies
+const secret = crypto.randomBytes(32)        // generate random server secret key for encrypting cookies
 
 // takes in session cookie, returns stringified json data
 function decryptCookie(data) {
     try {
         data = JSON.parse(Buffer.from(data, 'base64').toString('ascii'))
         const iv = Buffer.from(data.iv)
-        const decipher = crypto.createDecipheriv('aes-128-cbc', secret, iv)
-
+        const auth = Buffer.from(data.auth)
+        const decipher = crypto.createDecipheriv('aes-256-gcm', secret, iv)
+        decipher.setAuthTag(auth)
         let decrypted = decipher.update(data.data, 'hex', 'utf8')
         decrypted += decipher.final('utf8')
         return decrypted
@@ -29,11 +30,13 @@ function decryptCookie(data) {
 function encryptCookie(data) {
     try {
         const iv = crypto.randomBytes(16)
-        const cipher = crypto.createCipheriv('aes-128-cbc', secret, iv)
+        const cipher = crypto.createCipheriv('aes-256-gcm', secret, iv)
 
         let encrypted = cipher.update(data, 'utf8', 'hex')
         encrypted += cipher.final('hex')
-        return Buffer.from(JSON.stringify({ data: encrypted, iv: iv })).toString('base64')
+        const auth = cipher.getAuthTag();
+
+        return Buffer.from(JSON.stringify({ data: encrypted, iv, auth })).toString('base64')
     } catch (error) {
         return undefined
     }
@@ -41,7 +44,7 @@ function encryptCookie(data) {
 
 // takes in username, returns session cookie
 function createCookie(user) {
-    const data = JSON.parse(fs.readFileSync('./userData/' + user + '.json'))
+    const data = JSON.parse(fs.readFileSync('./data/userData/' + user + '.json'))
     const userData = {
         username: data.username,
         hash: data.hash
@@ -54,12 +57,12 @@ function authUser(session) {
     return new Promise((resolve) => {
         try {
             const user = JSON.parse(decryptCookie(session))
-            fs.access('./userData/' + user.username + '.json', (err) => {
+            fs.access('./data/userData/' + user.username + '.json', (err) => {
                 if (err) {
                     resolve(undefined)
                     return
                 }
-                fs.readFile('./userData/' + user.username + '.json', (error, data) => {
+                fs.readFile('./data/userData/' + user.username + '.json', (error, data) => {
                     if (error) {
                         resolve(undefined)
                         return
@@ -74,12 +77,12 @@ function authUser(session) {
 function findUser(username) {
     return new Promise((resolve) => {
         try {
-            fs.access('./userData/' + username + '.json', (err) => {
+            fs.access('./data/userData/' + username + '.json', (err) => {
                 if (err) {
                     resolve(undefined)
                     return
                 }
-                fs.readFile('./userData/' + username + '.json', (error, data) => {
+                fs.readFile('./data/userData/' + username + '.json', (error, data) => {
                     if (error) {
                         resolve(undefined)
                         return
@@ -93,14 +96,26 @@ function findUser(username) {
 
 function sha(input) { return crypto.createHash('sha256').update(input).digest('hex') }
 
+function save_img(fileName, img) {
+    const ext = img.split(';')[0].match(/jpeg|png|gif/)[0];
+    const data = img.replace(/^data:image\/\w+;base64,/, "");
+    const buf = new Buffer.from(data, 'base64');
+    const path = './assets/global/imgs/' + fileName + '.' + ext;
+    fs.writeFile(path, buf, () => { });
+    return path.replace('./assets', '');
+}
+
 // setting up express
 const app = express()
 
 app.set('view engine', 'ejs')
 app.use(express.static('./assets'))
 app.use(cookieParser())
-app.use(bodyParser.json())
+app.use(bodyParser.json({ limit: '100mb' }))
 
+app.get('/', (req, res) => {
+    res.redirect('/index')
+})
 
 // homepage
 app.get('/index', (req, res) => {
@@ -220,7 +235,7 @@ app.get('/findbuddy', async (req, res) => {
     const user = await authUser(req.cookies.session)
 
     if (user) {
-        fs.readdir('./userData/', async (err, files) => {
+        fs.readdir('./data/userData/', async (err, files) => {
             var users = []
             for (let i = 0; i < files.length; i++) {
                 users.push(findUser(files[i].split('.')[0]))
@@ -229,10 +244,10 @@ app.get('/findbuddy', async (req, res) => {
             var match = []
             for (let i = 0; i < users.length; i++) {
                 var thisUser = await users[i]
-                if (thisUser.username !== user.username) {
+                if (thisUser && thisUser.username !== user.username) {
                     for (let j = 0; j < thisUser.posts.length; j++) {
                         if (thisUser.posts[j].zip === user.zip) {
-                            match.push(thisUser.posts[j])
+                            match.push(Object.assign(thisUser.posts[j], thisUser))
                         }
                     }
                 }
@@ -251,7 +266,20 @@ app.get('/chat/', async (req, res) => {
     // check if user has valid session cookie, send chat page if yes
     const user = await authUser(req.cookies.session)
     if (user) {
-        res.render('chatClosed', { friends: user.friends })
+        const friends = [];
+        for (let i = 0; i < user.friends.length; i++) {
+            friends.push(new Promise((resolve, reject) => {
+                fs.readFile('./data/userData/' + user.friends[i] + '.json', async (err, user) => {
+                    if (err) {
+                        return reject(err);
+                    }
+                    resolve(JSON.parse(user));
+                })
+            }));
+        }
+        for (let i = 0; i < friends.length; i++) friends[i] = await friends[i];
+
+        res.render('chatClosed', { friends })
     }
 
     // otherwise, redirect to signup
@@ -262,7 +290,21 @@ app.get('/chat/:friend', async (req, res) => {
     // check if user has valid session cookie, send chat page if yes
     const user = await authUser(req.cookies.session)
     if (user) {
-        res.render('chatOpen', { friends: user.friends })
+        const friends = [];
+        for (let i = 0; i < user.friends.length; i++) {
+            friends.push(new Promise((resolve, reject) => {
+                fs.readFile('./data/userData/' + user.friends[i] + '.json', async (err, user) => {
+                    if (err) {
+                        return reject(err);
+                    }
+                    resolve(JSON.parse(user));
+                })
+            }));
+        }
+        for (let i = 0; i < friends.length; i++) friends[i] = await friends[i];
+
+
+        res.render('chatOpen', { friends, ws_url: process.env.WS_URL })
     }
 
     // otherwise, redirect to signup
@@ -275,7 +317,7 @@ app.post('/login', async (req, res) => {
     const data = req.body
 
     // read the file, if error, it doesn't exist, send fail
-    fs.readFile('./userData/' + data.username + '.json', async (err, user) => {
+    fs.readFile('./data/userData/' + data.username + '.json', async (err, user) => {
         if (err) {
             res.send('fail')
             return
@@ -303,7 +345,7 @@ app.post('/signup', (req, res) => {
     const data = req.body
 
     // read the file, if error, it doesn't exist, new user can be created
-    fs.access('./userData/' + data.username + '.json', async (err) => {
+    fs.access('./data/userData/' + data.username + '.json', async (err) => {
         if (err) {
             try {
                 // hash the password
@@ -314,6 +356,7 @@ app.post('/signup', (req, res) => {
                     username: data.username,
                     hash: hash,
                     name: data.name,
+                    profile_image: '../global/default.png',
                     zip: data.zip,
                     weight: data.weight,
                     bio: "Edit your profile to set your bio",
@@ -324,13 +367,11 @@ app.post('/signup', (req, res) => {
                 }
 
                 // save user data,  apologize if things go wrong
-                fs.writeFile('./userData/' + data.username + '.json', JSON.stringify(newUser), (error) => {
+                fs.writeFile('./data/userData/' + data.username + '.json', JSON.stringify(newUser), (error) => {
                     if (error) {
                         res.send('error')
                         return
                     }
-
-                    fs.writeFile('./assets/global/profile/' + data.username + '.png', defaultpp, () => { })
 
                     // otherwise, send session cookie
                     res.send(createCookie(data.username))
@@ -391,9 +432,9 @@ app.post('/reqFriend', async (req, res) => {
 
             if (!found && user.username !== data.request) {
                 newFriend.requests.push(user.username)
-                fs.writeFile('./userData/' + newFriend.username + '.json', JSON.stringify(newFriend), () => { })
+                fs.writeFile('./data/userData/' + newFriend.username + '.json', JSON.stringify(newFriend), () => { })
                 res.send('sent')
-            } else { res.send('sent') }
+            } else { res.send('notfound') }
         } else { res.send('notfound') }
     }
 
@@ -424,22 +465,22 @@ app.post('/acceptFriend', async (req, res) => {
             user.friends.push(data.request)
             newFriend.friends.push(user.username)
 
-            fs.writeFile('./userData/' + user.username + '.json', JSON.stringify(user), () => { })
-            fs.writeFile('./userData/' + newFriend.username + '.json', JSON.stringify(newFriend), () => { })
+            fs.writeFile('./data/userData/' + user.username + '.json', JSON.stringify(user), () => { })
+            fs.writeFile('./data/userData/' + newFriend.username + '.json', JSON.stringify(newFriend), () => { })
 
             // calculate name of conversation
             var chatID
-            if (data.request > user.username) { chatID = data.request + user.username }
-            else { chatID = user.username + data.request }
+            if (newFriend.username > user.username) { chatID = newFriend.username + user.username }
+            else { chatID = user.username + newFriend.username }
             chatID = sha(chatID)
 
             // create directory for conversation
-            fs.mkdir('./conversations/' + chatID, () => {
+            fs.mkdir('./data/conversations/' + chatID, () => {
                 const newFile0 = { type: 'end' }
-                fs.writeFile('./conversations/' + chatID + '/0.json', JSON.stringify(newFile0), () => { })
+                fs.writeFile('./data/conversations/' + chatID + '/0.json', JSON.stringify(newFile0), () => { })
 
                 const newFile1 = { type: 'messages', users: [user.username, data.request], number: 1, messages: [] }
-                fs.writeFile('./conversations/' + chatID + '/1.json', JSON.stringify(newFile1), () => { })
+                fs.writeFile('./data/conversations/' + chatID + '/1.json', JSON.stringify(newFile1), () => { })
             })
             res.send('success')
         } else { res.send('error') }
@@ -459,12 +500,11 @@ app.post('/editprofile', async (req, res) => {
         if (data.bio) { user.bio = data.bio }
         if (data.name) { user.name = data.name }
         if (data.image) {
-            const fileName = user.username + '.png'
-            var base64Data = req.body.image.replace(/^data:image\/png;base64,/, "");
-            fs.writeFile('./assets/global/profile/' + fileName, base64Data, 'base64', () => { })
+            const path = save_img(user.username, data.image)
+            user.profile_image = path;
         }
 
-        fs.writeFile('./userData/' + user.username + '.json', JSON.stringify(user), (error) => {
+        fs.writeFile('./data/userData/' + user.username + '.json', JSON.stringify(user), (error) => {
             if (error) {
                 res.send('error')
                 return
@@ -487,7 +527,7 @@ app.post('/buddy', async (req, res) => {
         data.zip = user.zip
         user.posts.push(data)
 
-        fs.writeFile('./userData/' + user.username + '.json', JSON.stringify(user), (error) => {
+        fs.writeFile('./data/userData/' + user.username + '.json', JSON.stringify(user), (error) => {
             if (error) {
                 res.send('error')
                 return
@@ -507,11 +547,8 @@ app.post('/activitylogger', async (req, res) => {
     if (user) {
         try {
             const data = req.body
-
-            const fileName = sha(user.username + Date.now()) + '.png'
-
-            var base64Data = req.body.image.replace(/^data:image\/png;base64,/, "");
-            fs.writeFile('./assets/global/logs/' + fileName, base64Data, 'base64', () => { })
+            const fileName = sha(user.username + Date.now())
+            const path = save_img(fileName, data.image)
 
             var splitDate = data.date.split('-')
             const newLog = {
@@ -519,13 +556,13 @@ app.post('/activitylogger', async (req, res) => {
                 mins: parseInt(data.mins),
                 date: splitDate[1] + '/' + splitDate[2] + '/' + splitDate[0],
                 description: data.description,
-                image: '../global/logs/' + fileName
+                image: path
             }
 
             user.log.push(newLog)
-            fs.writeFile('./userData/' + user.username + '.json', JSON.stringify(user), () => { })
+            fs.writeFile('./data/userData/' + user.username + '.json', JSON.stringify(user), () => { })
             res.send('logged')
-        } catch { res.send('error') }
+        } catch (error) { res.send('error') }
     }
 
     // otherwise, redirect to signup
@@ -548,5 +585,5 @@ app.post('/loggerdata', async (req, res) => {
 app.listen(8080)    // start the server
 
 const websocket = fork('./websocket.js')
-websocket.send(secret)
+websocket.send(secret.toString('hex'))
 

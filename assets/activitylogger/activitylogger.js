@@ -62,11 +62,7 @@ function logActivity() {
         else {
             document.getElementById('dateTooltip').style.visibility = "hidden";
         }
-    
-    
-    
-        console.log(data)
-    
+ 
         if (error) {
             return
         }

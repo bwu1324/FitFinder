@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 
-<head style="background-color:blue">
-  <title>Purple Buzz - Contact Page</title>
+
+
+<head>
+  <title>FitFinder</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
+  
   <script src="./friends.js"></script>
 
   <script src="../global/js/global.js"></script>
@@ -28,24 +30,24 @@
   <script src="../global/js/isotope.pkgd.js"></script>
   <!-- Page Script -->
   <script>
-    $(window).load(function () {
-      // init Isotope
-      var $projects = $('.projects').isotope({
-        itemSelector: '.project',
-        layoutMode: 'fitRows'
+      $(window).load(function () {
+          // init Isotope
+          var $projects = $('.projects').isotope({
+              itemSelector: '.project',
+              layoutMode: 'fitRows'
+          });
+          $(".filter-btn").click(function () {
+              var data_filter = $(this).attr("data-filter");
+              $projects.isotope({
+                  filter: data_filter
+              });
+              $(".filter-btn").removeClass("active");
+              $(".filter-btn").removeClass("shadow");
+              $(this).addClass("active");
+              $(this).addClass("shadow");
+              return false;
+          });
       });
-      $(".filter-btn").click(function () {
-        var data_filter = $(this).attr("data-filter");
-        $projects.isotope({
-          filter: data_filter
-        });
-        $(".filter-btn").removeClass("active");
-        $(".filter-btn").removeClass("shadow");
-        $(this).addClass("active");
-        $(this).addClass("shadow");
-        return false;
-      });
-    });
   </script>
 </head>
 
@@ -101,7 +103,7 @@
 
             <div class="p-2">
               <div class="card" style="width: 18rem; border-radius: 0.75rem">
-                <img class="card-img-top" src="../global/profile/<%-friendRequests[i].username%>.png"
+                <img class="card-img-top" src="<%-friendRequests[i].profile_image%>"
                   alt="Card image cap">
                 <div class="card-body">
                   <h5 class="card-title">@<%-friendRequests[i].username%>
@@ -137,7 +139,7 @@
 
                     <div class="p-2">
                       <div class="card" style="width: 18rem; border-radius: 0.75rem">
-                        <img class="card-img-top" src="../global/profile/<%-friends[i].username%>.png"
+                        <img class="card-img-top" src="<%-friends[i].profile_image %>"
                           alt="Card image cap">
                         <div class="card-body">
                           <h5 class="card-title">

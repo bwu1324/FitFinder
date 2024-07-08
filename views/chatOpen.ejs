@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 
-<head style="background-color:blue">
-    <title>Purple Buzz - Contact Page</title>
+<head>
+    <title>FitFinder</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href='./chat.css' rel="stylesheet">
+    <link rel="stylesheet" href="./chat.css">
     <script src="./chat.js"></script>
 
     <script src="../global/js/global.js"></script>
@@ -91,18 +91,18 @@
         </div>
     </nav>
     <!-- Close Header -->
-
+    <p style="display: none;"><%- ws_url  %></p>
     <div id="friends">
-        <% for (let i=0; i < friends.length; i++) { %>
-            <a class="friendLink" href="./<%-friends[i]%>">
+        <% friends.forEach(function(friend){ %>
+            <a class="friendLink" href="./<%-friend.username %>">
                 <div class="friend">
-                    <img class='friendProfile' src="../global/profile/<%-friends[i]%>.png">
+                    <img class='friendProfile' src="<%- friend.profile_image %>">
                     <h5 class='friendName'>
-                        <%-friends[i]%>
+                        <%-friend.name %>
                     </h5>
                 </div>
             </a>
-            <% } %>
+            <% }) %>
     </div>
     <div id="chat" onload="connect()">
         <div id="history-container">

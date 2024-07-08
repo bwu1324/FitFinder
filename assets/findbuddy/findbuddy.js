@@ -2,7 +2,7 @@ function sendFriendRequest (username) {
     const data = {  
         request: username,
     }
-    console.log(data)
+
     var xhr = new XMLHttpRequest();                                 // create http request and send it
     xhr.open("POST", "/reqFriend", true);
     xhr.setRequestHeader('Content-Type', 'application/json');

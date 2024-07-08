@@ -92,16 +92,22 @@
     <!-- Close Header -->
 
     <div id="friends">
+        <% if (friends.length === 0) { %>
+            <div class="friend">
+                Connect with some friends to chat!
+            </div>
+        <% } else { %> %>
         <% friends.forEach(function(friend){ %>
-            <a class="friendLink" href="./<%-friend%>">
+            <a class="friendLink" href="./<%-friend.username %>">
                 <div class="friend">
-                    <img class='friendProfile' src="../global/profile/<%- friend %>.png">
+                    <img class='friendProfile' src="<%- friend.profile_image %>">
                     <h5 class='friendName'>
-                        <%-friend%>
+                        <%-friend.name %>
                     </h5>
                 </div>
             </a>
-            <% }); %>
+        <% }); %>   
+        <% } %>
     </div>
     <div id="chat">
 

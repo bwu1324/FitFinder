@@ -44,11 +44,11 @@ socket.onmessage = function (message) {
         const user = message.data.username
         var className
         var senderClassName
-        if (user === chat) { 
-            className = 'leftMessage' 
+        if (user === chat) {
+            className = 'leftMessage'
             senderClassName = 'leftSender'
-        } else { 
-            className = 'rightMessage' 
+        } else {
+            className = 'rightMessage'
             senderClassName = 'rightSender'
         }
 
@@ -87,11 +87,11 @@ socket.onmessage = function (message) {
                 const user = message.data.messages[i].username
                 var className
                 var senderClassName
-                if (user === chat) { 
-                    className = 'leftMessage' 
+                if (user === chat) {
+                    className = 'leftMessage'
                     senderClassName = 'leftSender'
-                } else { 
-                    className = 'rightMessage' 
+                } else {
+                    className = 'rightMessage'
                     senderClassName = 'rightSender'
                 }
 
@@ -126,12 +126,12 @@ socket.onmessage = function (message) {
 function send() {
     const text = document.getElementById('message').value
     document.getElementById('message').value = ''
+
     const message = {
         type: 'message',
         chat: chat,
         message: text,
         timestamp: Date.now(),
     }
-
     socket.send(JSON.stringify(message))
 }

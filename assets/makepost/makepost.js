@@ -37,8 +37,6 @@ function makePost() {
         document.getElementById('captTooltip').style.visibility = "hidden";
     }
 
-    console.log(data)
-
     if (error) {
         return
     }
